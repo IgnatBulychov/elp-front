@@ -1,5 +1,7 @@
 const cookieparser = process.server ? require('cookieparser') : undefined
 
+export const strict = false
+
 export const actions = {
     nuxtServerInit ({ commit }, { req }) {
         console.log('init')

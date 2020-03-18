@@ -1,81 +1,95 @@
 <template>
-    <div> 
-      <v-card :elevation="2">
-        <v-card-text>
-        
+  <div> 
+    <v-card :elevation="2">
+      <v-card-text>
         <v-btn :to="`/dashboard/items/new`" class="ma-2" dark color="teal">
-            <v-icon dark>mdi-plus</v-icon>         </v-btn>    
+          <v-icon dark>mdi-plus</v-icon>
+        </v-btn>    
 
-          <v-simple-table>
-              <template v-slot:default>
-                  
-                  <thead>
-                      <tr>
-                      <th class="text-center">Название</th>
-                      <th class="text-center">Описание</th>
-                      <th class="text-center">Действия</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                          <template v-if="!portfolioItems.length" > 
-                              <template v-if="$store.getters.isLoading"> 
-                                  <tr>
-                                      <td colspan="3" class="text-center">
-                                          <div  class="text-center">
-                                              <v-progress-circular
-                                                  :size="30"
-                                                  color="teal"
-                                                  indeterminate
-                                              ></v-progress-circular>
-                                          </div>
-                                      </td>
-                                  </tr>
-                              </template>
-                              <template v-else>
-                                      <tr>
-                                  <td colspan="3" class="text-center">
-                                      <div  class="text-center">
-                                      В портфолио пока нет записей
-                                      </div>
-                                  </td>
-                                  </tr>
-                              </template>      
-                          </template>
-                          <template v-else>
-                              <tr v-for="(portfolioItem, index) in portfolioItems" :key="portfolioItem.id">
-                                  <td>{{ portfolioItem.title }}</td>
-                                  <td>{{ portfolioItem.description }}</td>
-                                  <td class="text-center">
-                                      <v-btn  @click="remove(portfolioItem.id, index)" 
-                                        class="mx-2"
-                                        fab
-                                        small
-                                        color="error"
-                                        :loading="loadings[index] && $store.getters.isLoading"
-                                      >
-                                        <v-icon dark>delete_outline</v-icon>
-                                      </v-btn>
-
-                                      <v-btn 
-                                        :to="`/dashboard/portfolio/${portfolioItem.id}`"
-                                        class="mx-2" 
-                                        fab 
-                                        dark 
-                                        small 
-                                        color="warning"
-                                      >
-                                        <v-icon dark>edit</v-icon>
-                                      </v-btn>                                    
-                                  </td>
-                              </tr>
-                          </template>
-                      
-                  </tbody>
+        <v-simple-table>
+          <template v-slot:default>
+            <thead>
+                <tr>
+                <th class="text-center">Название</th>
+                <th class="text-center">Описание</th>
+                <th class="text-center">Цена</th>
+                <th class="text-center">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+              <template v-if="!items.length" > 
+                <template v-if="$store.state.item.loading"> 
+                  <tr>
+                    <td colspan="3" class="text-center">
+                      <div  class="text-center">
+                        <v-progress-circular
+                            :size="30"
+                            color="teal"
+                            indeterminate
+                        ></v-progress-circular>
+                      </div>
+                    </td>
+                  </tr>
+                </template>
+                <template v-else>
+                  <tr>
+                    <td colspan="4" class="text-center">
+                        <div  class="text-center">
+                        Пока записей нет
+                        </div>
+                    </td>
+                  </tr>
+                </template>      
               </template>
+              <template v-else>
+                  
+                <tr v-for="(item, index) in items" :key="item.id">
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.cost }}</td>
+                    <td class="text-center">
+                        <v-btn  @click="remove(item.id, index)" 
+                          class="mx-2"
+                          fab
+                          small
+                          color="error"
+                          :loading="loadings[index] && $store.state.item.loading"
+                        >
+                          <v-icon dark>mdi-delete-outline</v-icon>
+                        </v-btn>
+
+                        <v-btn 
+                          :to="`/dashboard/items/${item.id}`"
+                          class="mx-2" 
+                          fab 
+                          dark 
+                          small 
+                          color="warning"
+                        >
+                          <v-icon dark>mdi-lead-pencil</v-icon>
+                        </v-btn>                                    
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </template>
           </v-simple-table>
-        
         </v-card-text>
       </v-card>
+       <v-snackbar
+        v-model="serverErrors.status"
+        :timeout="4000"
+        :top="true"
+        color="error"
+      >{{ serverErrors.messages }}
+      <v-btn
+        color="white"
+        text
+        @click="serverErrors.status = false"
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+      </v-snackbar>
     </div>
 </template>
 
@@ -84,20 +98,29 @@
         name: 'items',
         data() {
             return {
-                currentRemoving: -1
+                currentRemoving: -1,
+                serverErrors: {
+                  status: false,
+                  messages: []
+                },  
             };
         },
         mounted() {
-            //this.$store.dispatch('portfolio/getPortfolioItems')
+          this.$store.dispatch('item/getItems')
+        },
+        watch: {
+          errorsFromServer: function (newValue) {
+            this.serverErrors.messages = newValue
+            this.serverErrors.status = true
+          }
         },
         computed: {
-            portfolioItems() {
-                //return this.$store.state.portfolio.portfolioItems
-                return []
+            items() {
+              return this.$store.state.item.items
             },
             loadings() {
               let loadings = {}
-              for (let i = 0; i < this.portfolioItems.length; i++) { 
+              for (let i = 0; i < this.items.length; i++) { 
                 if (this.currentRemoving == i) {
                   loadings[i] = true
                 } else {
@@ -105,15 +128,15 @@
                 }   
               }
               return loadings
+            },
+            errorsFromServer: function () {
+                return this.$store.state.item.errors
             }
-        },
-        created() {
-          this.$store.state.portfolio.loading = false
         },
         methods: {
             remove(id, index) {
                 this.currentRemoving = index
-                this.$store.dispatch('portfolio/removePortfolioItem', id)
+                this.$store.dispatch('item/removeItem', id)
             }
         }
     }
@@ -123,41 +146,4 @@
 .theme--light.v-btn {
     color: white
 }
-
-.custom-loader {
-    animation: loader 1s infinite;
-    display: flex;
-  }
-  @-moz-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  @-webkit-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  @-o-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  @keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
 </style>

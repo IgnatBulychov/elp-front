@@ -50,10 +50,6 @@
                   required
                   :disabled="$store.state.auth.loading"
                 ></v-text-field>
-
-                <p v-if="authError" class="text-center red--text text--lighten-1"> 
-                  {{authError}} 
-                </p>
               </v-card-text>
 
              <v-card-actions>                  
@@ -71,10 +67,25 @@
                 indeterminate
                 color="teal"
               ></v-progress-linear>
+             
             </v-form>
           </v-card>
         </v-col>
       </v-row>
+      <v-snackbar
+        v-model="serverErrors.status"
+        :timeout="4000"
+        :top="true"
+        color="error"
+      >{{ serverErrors.messages }}
+      <v-btn
+        color="white"
+        text
+        @click="serverErrors.status = false"
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+      </v-snackbar>
     </v-container>
   </v-content>
 </v-app>
@@ -89,8 +100,11 @@
               form: {
                   email: '',
                   password: ''
-              },
-              error: null,
+              },   
+              serverErrors: {
+                status: false,
+                messages: []
+              },      
               emailRules: [
                 v => !!v || 'Введите E-mail',
                 v => /.+@.+\..+/.test(v) || 'Некорректный E-mail',
@@ -100,8 +114,24 @@
               ],
       }
     },
-    created() {
-      this.$store.state.auth.loading = false
+    computed: {
+      errorsFromServer: function () {
+          return this.$store.state.auth.errors
+      }
+    },
+    watch: {
+      errorsFromServer: function (newValue) {
+        if (newValue.response) {
+          if (newValue.response.status === 401) {
+            this.serverErrors.messages = 'Неверный логин или пароль'
+          } else {
+            this.serverErrors.messages = newValue
+          }
+        } else {
+          this.serverErrors.messages = newValue
+        }
+        this.serverErrors.status = true
+      }
     },
     methods: {
       authenticate() {
@@ -113,11 +143,6 @@
         if (this.$refs.form.validate()) {
           return true
         }
-      }
-    },
-    computed: {
-      authError() {
-        return this.$store.getters.authError;
       }
     }
   }

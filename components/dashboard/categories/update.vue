@@ -3,7 +3,7 @@
     <v-card :elevation="2">
       <v-card-text>
         <v-form
-          @submit.prevent="add"
+          @submit.prevent="update"
         >
           <v-text-field
             v-model="category.title"
@@ -27,12 +27,12 @@
             color="teal"
             class="mr-4"
             :disabled="$store.state.category.loading"
-          >Добавить</v-btn>
+          >Изменить</v-btn>
 
         </v-form>
       </v-card-text>
     </v-card>  
-    <v-snackbar
+        <v-snackbar
         v-model="serverErrors.status"
         :timeout="4000"
         :top="true"
@@ -75,7 +75,20 @@ export default {
           },
       }
   },
-  watch: {
+  created() {           
+    if (this.$store.state.category.categories.length) {
+        this.category = this.$store.getters['category/getCategory'](this.$route.params.id)
+    } else {
+        this.$store.commit('category/loadingActivate')
+        this.$axios.$get(`/api/categories/${this.$route.params.id}`)
+            .then((response) => {
+                console.log(response.category)
+                this.category = response.category
+                this.$store.commit('category/loadingDeactivate')
+            });
+    }
+  },
+    watch: {
       errorsFromServer: function (newValue) {
         if (newValue.response) {
           if (newValue.response.status === 401) {
@@ -98,12 +111,13 @@ export default {
       }
   },
   methods: {
-    add() {
-      let app = this      
+    update() {
+      let app = this   
+      this.$store.commit('category/loadingActivate')   
       if (this.validate()) {            
         const formData = new FormData();
         formData.append("category", JSON.stringify(app.category))
-        app.$store.dispatch('category/newCategory', formData)  
+        app.$store.dispatch('category/updateCategory', [formData, app.$route.params.id])  
       } else {
         this.$store.commit('category/loadingDeactivate')
       }

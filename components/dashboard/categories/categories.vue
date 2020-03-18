@@ -40,6 +40,7 @@
                 </template>      
               </template>
               <template v-else>
+                  
                 <tr v-for="(category, index) in categories" :key="category.id">
                     <td>{{ category.title }}</td>
                     <td class="text-center">
@@ -54,14 +55,14 @@
                         </v-btn>
 
                         <v-btn 
-                          :to="`/dashboard/category/${category.id}`"
+                          :to="`/dashboard/categories/${category.id}`"
                           class="mx-2" 
                           fab 
                           dark 
                           small 
                           color="warning"
                         >
-                          <v-icon dark>mdi-edit</v-icon>
+                          <v-icon dark>mdi-lead-pencil</v-icon>
                         </v-btn>                                    
                     </td>
                   </tr>
@@ -71,6 +72,20 @@
           </v-simple-table>
         </v-card-text>
       </v-card>
+       <v-snackbar
+        v-model="serverErrors.status"
+        :timeout="4000"
+        :top="true"
+        color="error"
+      >{{ serverErrors.messages }}
+      <v-btn
+        color="white"
+        text
+        @click="serverErrors.status = false"
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+      </v-snackbar>
     </div>
 </template>
 
@@ -79,15 +94,25 @@
         name: 'categories',
         data() {
             return {
-                currentRemoving: -1
+                currentRemoving: -1,
+                serverErrors: {
+                  status: false,
+                  messages: []
+                },  
             };
         },
         mounted() {
           this.$store.dispatch('category/getCategories')
         },
+        watch: {
+          errorsFromServer: function (newValue) {
+            this.serverErrors.messages = newValue
+            this.serverErrors.status = true
+          }
+        },
         computed: {
             categories() {
-                return this.$store.state.category.categories
+              return this.$store.state.category.categories
             },
             loadings() {
               let loadings = {}
@@ -99,10 +124,10 @@
                 }   
               }
               return loadings
+            },
+            errorsFromServer: function () {
+                return this.$store.state.category.errors
             }
-        },
-        created() {
-          //this.$store.commit('category/loadingDeActivate')
         },
         methods: {
             remove(id, index) {

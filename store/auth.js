@@ -2,17 +2,25 @@ const Cookie = process.client ? require('js-cookie') : undefined
 
 export const state = () => ({
    loading: false,
-   user: null
+   user: null,
+   errors: null
 })
+
+export const getters = {
+    getErrors: (state) => {
+        return state.errors
+    },
+}
 
 export const mutations = {
     setAuth (state, user) {
         state.loading = false
         state.user = user
     },
-    authFailed (state) {
+    authFailed (state, error) {
         state.loading = false
         state.user = null
+        state.errors = error
     },
     loadingActivate (state) {
         state.loading = true
@@ -29,9 +37,9 @@ export const actions = {
             context.commit('setAuth', response)
             app.$router.push({path: '/dashboard'})
         })
-        .catch((err) => {
-            console.log(err)
-            context.commit('authFailed')
+        .catch((error, response) => {
+            console.log(error)
+            context.commit('authFailed', error)
         })       
     },
     logout(context) {

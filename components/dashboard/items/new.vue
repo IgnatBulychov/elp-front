@@ -7,6 +7,16 @@
       @submit.prevent="add"
     >
 
+        <v-select
+          v-model="selectedCategories"
+          :items="categories"
+          label="Категории"
+          multiple
+          chips
+          hint="Выберите категории для этой записи"
+          persistent-hint
+        ></v-select>
+
       <v-text-field
         v-model="item.title"
         @change="validateTitle()"
@@ -74,6 +84,7 @@ export default {
               description: '',
               cost: ''
           },
+          selectedCategories: null,
           errors: {
             title: {
               status: false,
@@ -90,38 +101,35 @@ export default {
           },
       }
   },
+  mounted() {
+    this.$store.dispatch('category/getCategories')
+  },
   computed: {
-      currentUser() {
-        return this.$store.getters.currentUser
-        console.log('helo uset')
-      },
-      priceCategoryId() {
-        return this.$route.params.id
-      }
+    categories() {
+      let categories = []
+      this.$store.state.category.categories.forEach(function(item, i, arr) {
+        let category = {  
+          text: item.title,
+          value: item.id
+        }
+        categories.push(category)
+      })    
+      
+      return categories
+    },
   },
   methods: {
-      add() {
-        let app = this      
-        
-        if (this.validate()) {            
-
-          app.$store.state.item.loading= true
-
-          const formData = new FormData();
-
-          formData.append("item", JSON.stringify(app.item))
-          formData.append("priceCategoryId", app.priceCategoryId)
-          
-          app.$axios.$post('/api/items/new', formData)
-          .then(response => {
-                app.$store.state.loading = false
-                this.$store.dispatch('getPrice')
-                app.$router.push('/dashboard/items')
-          })
-        } else {
-          app.$store.getters.isLoading = false
-        }
-      },
+     add() {
+      let app = this      
+      if (this.validate()) {            
+        const formData = new FormData();
+        formData.append("item", JSON.stringify(this.item))
+        formData.append("category", this.selectedCategories)
+        app.$store.dispatch('item/newItem', formData)  
+      } else {
+        this.$store.commit('item/loadingDeactivate')
+      }
+    },
       validate () {
         this.validateTitle()
         this.validateDescription()

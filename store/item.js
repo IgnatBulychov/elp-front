@@ -1,123 +1,82 @@
-export const state = () => ({
-    items: []
+export const state = () => ({   
+    loading: false, 
+    items: [],
+    errors: false
 })
 
 export const getters = {
-    getItems (state) {
-        return state.items
+    getItem: (state) => (id) => {
+        let item = state.items.find(item => item.id == id)
+        return category
     },
 }
 
 export const mutations = {
-    updateItems(state, payload) {
-        state.price = payload
+    loadingActivate(state) {
+        state.loading = true
+    },
+    loadingDeactivate(state) {
         state.loading = false
     },
+    failed (state, error) {
+        state.errors = error
+    },
+    updateItems(state, payload) {
+        state.items = payload
+        state.loading = false
+    }
 }
 
 export const actions = {
-    getItems(context) {
-        console.log('getprice')
-        context.state.loading = true
-        this.$axios.$get('/api/price')
+    getItems(context, state) {
+        let app = this
+        context.commit('loadingActivate')
+        app.$axios.$get('/api/items')
         .then((response) => {
-            context.commit('updatePrice', response.data.price)
-            
-        console.log(response.data.price)
+            context.commit('updateItems', response.items)
+        })
+        .catch((error) => {
+            context.commit('failed', error)
+            context.commit('loadingDeactivate')
         })
     },
-}
-
-
-/*
-let store = {
-    state() {
-    return  {
-       
-        portfolioItems: [],
-        priceCategories: [],
-        priceItems: []
-        
-    }},
-    getters: {
-       
-        portfolioItems (state) {
-            return state.portfolioItems
-        },
-        
-       priceCategories (state) {
-            return state.priceCategories
-        },
-        priceItems (state) {
-            return state.priceItems
-        }
-
+    newItem(context, formData) {
+        let app = this
+        context.commit('loadingActivate')
+        app.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
+        app.$axios.$post('/api/items/new', formData)
+        .then(response => {
+            app.$router.push('/dashboard/items')
+        })
+        .catch((error) => {
+            context.commit('failed', error)
+            context.commit('loadingDeactivate')
+        })
     },
-    mutations: {
-        
-        updatePortfolioItems(state, payload) {
-            state.portfolioItems = payload
-            state.loading = false
-        },
-        
-        updatePriceCategories(state, payload) {
-            state.priceCategories = payload
-            state.loading = false
-        },
-        updatePriceItems(state, payload) {
-            state.priceItems = payload
-            state.loading = false
-        }
+    updateItem(context, [formData, id]) {
+        let app = this
+        context.commit('loadingActivate')
+        app.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
+        app.$axios.$post('/api/items/update/' + id, formData)
+        .then(response => {
+            app.$router.push('/dashboard/items')
+        })
+        .catch((error) => {
+            context.commit('failed', error)
+            context.commit('loadingDeactivate')
+        })
     },
-   
-    actions: {
-        
-        getPortfolioItems(context) {
-            context.state.loading = true
-            axios.get('/api/portfolioitems')
-            .then((response) => {
-                context.commit('updatePortfolioItems', response.data.portfolioItems)
-            })
-        },
-        removePortfolioItem(context, id) {
-            context.state.loading = true
-            axios.post('/api/portfolioitems/remove/' + id)
-            .then(response => {
-                context.dispatch('getPortfolioItems')
-            })
-        },
-        getPriceCategories(context) {
-            context.state.loading = true
-            axios.get('/api/pricecategories')
-            .then((response) => {
-                context.commit('updatePriceCategories', response.data.priceCategories)
-            })
-        },
-        
-        removePriceCategory(context, id) {
-            context.state.loading = true
-            axios.post('/api/pricecategories/remove/' + id)
-            .then(response => {
-                context.dispatch('getPriceCategories')
-            })
-        },
-        getPriceItems (context, id) {
-            context.state.loading = true
-            console.log('1111111111----' + id)
-            axios.get('/api/priceitems/' + id)
-            .then((response) => {
-                context.commit('updatePriceItems', response.data.priceItems)
-            })
-        },
-        removePriceItem(context, data) {
-            console.log('!!!!!!!!!-' + data)
-            context.state.loading = true
-            axios.post('/api/priceitems/remove/' + data.id)
-            .then(response => {
-                context.dispatch('getPriceItems', data.currentCategory)
-            })
-        },
-        
+    removeItem(context, id) {
+        let app = this
+        context.commit('loadingActivate')
+        app.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
+        this.$axios.$post('/api/items/remove/' + id)
+        .then(response => {
+            context.dispatch('getItems')
+        })
+        .catch((error) => {
+            context.commit('failed', error)
+            context.commit('loadingDeactivate')
+        })
     }
-};
-*/
+}
