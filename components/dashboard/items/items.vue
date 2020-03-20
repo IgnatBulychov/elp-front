@@ -13,6 +13,7 @@
                 <th class="text-center">Название</th>
                 <th class="text-center">Описание</th>
                 <th class="text-center">Цена</th>
+                <th class="text-center">Категории</th>
                 <th class="text-center">Действия</th>
                 </tr>
             </thead>
@@ -20,7 +21,7 @@
               <template v-if="!items.length" > 
                 <template v-if="$store.state.item.loading"> 
                   <tr>
-                    <td colspan="3" class="text-center">
+                    <td colspan="5" class="text-center">
                       <div  class="text-center">
                         <v-progress-circular
                             :size="30"
@@ -33,7 +34,7 @@
                 </template>
                 <template v-else>
                   <tr>
-                    <td colspan="4" class="text-center">
+                    <td colspan="5" class="text-center">
                         <div  class="text-center">
                         Пока записей нет
                         </div>
@@ -47,6 +48,17 @@
                     <td>{{ item.title }}</td>
                     <td>{{ item.description }}</td>
                     <td>{{ item.cost }}</td>
+                    <td>
+                      <v-chip
+                        v-for="category in item.categories" :key="category.id"
+                        class="ma-2"
+                        color="teal"
+                        text-color="white"
+                      >
+                         {{ category.title }}
+                      </v-chip>
+                     
+                    </td>
                     <td class="text-center">
                         <v-btn  @click="remove(item.id, index)" 
                           class="mx-2"

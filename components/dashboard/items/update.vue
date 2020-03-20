@@ -4,10 +4,10 @@
       <v-card-text>
 
     <v-form
-      @submit.prevent="add"
+      @submit.prevent="update"
     >
 
-        <v-select
+       <v-select
           v-model="selectedCategories"
           :items="categories"
           no-data-text="Категории не найдены"
@@ -54,7 +54,7 @@
 
 
       <v-btn
-        @click="$router.push('/dashboard/pricecategories')"  
+        @click="$router.push('/dashboard/items')"  
         color="secondary"
         :disabled="$store.getters.isLoading"
         class="mr-4"
@@ -65,7 +65,7 @@
         color="teal"
         class="mr-4"
         :disabled="$store.getters.isLoading"
-      >Добавить</v-btn>
+      >Изменить</v-btn>
 
     </v-form>
   </v-card-text>
@@ -76,15 +76,16 @@
 
 <script>
 export default {
-  name: 'newItem',
+  name: 'updateItem',
   data() {
       return {
           item: {
               title: '',
               description: '',
-              cost: ''
+              cost: '',
+              categories: [],
           },
-          selectedCategories: null,
+          categoriesSetter: null,
           errors: {
             title: {
               status: false,
@@ -113,21 +114,74 @@ export default {
           value: item.id
         }
         categories.push(category)
-      })    
-      
+      })
       return categories
     },
+    selectedCategories: {
+      get: function () {
+        console.log(this.item)
+        let categories = []
+        if (this.categoriesSetter) {
+          categories = this.categoriesSetter
+          return categories
+        } else {
+          this.item.categories.forEach(function(item, i, arr) {
+            let category = {  
+              text: item.title,
+              value: item.id
+            }
+            categories.push(category)
+          })
+          return categories
+        }
+       
+      },
+      set: function (newValue) {
+        console.log(newValue)
+        this.categoriesSetter = newValue
+      } 
+    },
+    errorsFromServer: function () {
+          return this.$store.state.category.errors
+    }
+  },
+  created() {           
+    if (this.$store.state.item.items.length) {
+        this.item = this.$store.getters['item/getItem'](this.$route.params.id)
+    } else {
+        this.$store.commit('item/loadingActivate')
+        this.$axios.$get(`/api/items/${this.$route.params.id}`)
+            .then((response) => {
+                this.item = response.item
+                this.$store.commit('item/loadingDeactivate')
+            });
+    }
+  },
+  watch: {
+      errorsFromServer: function (newValue) {
+        if (newValue.response) {
+          if (newValue.response.status === 401) {
+            this.serverErrors.messages.push('Ошибка авторизации')
+            this.$store.dispatch('auth/logout')  
+          } else if (newValue.response.status === 400) {
+            this.serverErrors.messages = JSON.parse(newValue.response.data.errors)
+          } else {
+            this.serverErrors.messages.push(newValue)
+          }
+        } else {
+          this.serverErrors.messages.push(newValue)
+        }
+        this.serverErrors.status = true
+      }
   },
   methods: {
-     add() {
+     update() {
       let app = this      
       if (this.validate()) {            
         const formData = new FormData();
         formData.append("item", JSON.stringify(this.item))
-          console.log(this.item)
-        console.log(this.selectedCategories)
         formData.append("categories", JSON.stringify(this.selectedCategories))
-        app.$store.dispatch('item/newItem', formData)  
+        app.$store.dispatch('item/updateItem', [formData, app.$route.params.id])  
       } else {
         this.$store.commit('item/loadingDeactivate')
       }
@@ -187,7 +241,7 @@ export default {
         } else { 
           this.validateCostReset() 
         }
-      }
+      },
   }
 } 
 </script>

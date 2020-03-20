@@ -88,7 +88,7 @@ export default {
             });
     }
   },
-    watch: {
+  watch: {
       errorsFromServer: function (newValue) {
         if (newValue.response) {
           if (newValue.response.status === 401) {

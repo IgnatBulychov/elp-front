@@ -7,7 +7,7 @@ export const state = () => ({
 export const getters = {
     getItem: (state) => (id) => {
         let item = state.items.find(item => item.id == id)
-        return category
+        return item
     },
 }
 
