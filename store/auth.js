@@ -3,7 +3,10 @@ const Cookie = process.client ? require('js-cookie') : undefined
 export const state = () => ({
    loading: false,
    user: null,
-   errors: null
+   errors: {
+    status: false,
+    messages: []
+   } 
 })
 
 export const getters = {
@@ -20,7 +23,18 @@ export const mutations = {
     authFailed (state, error) {
         state.loading = false
         state.user = null
-        state.errors = error
+        if (error.response) {
+            if (error.response.status == 401) {
+              state.errors.status = true
+              state.errors.messages = 'Неверный логин или пароль'
+            } else {
+                state.errors.status = true
+                state.errors.messages = error
+            }
+        } else {
+            state.errors.status = true
+            state.errors.messages = error
+        }  
     },
     loadingActivate (state) {
         state.loading = true

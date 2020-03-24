@@ -73,15 +73,15 @@
         </v-col>
       </v-row>
       <v-snackbar
-        v-model="serverErrors.status"
-        :timeout="4000"
+        v-model="errorsFromServer.status"
+        :timeout="6000"
         :top="true"
         color="error"
-      >{{ serverErrors.messages }}
+      >{{ errorsFromServer.messages }}
       <v-btn
         color="white"
         text
-        @click="serverErrors.status = false"
+        @click="errorsFromServer.status = false"
       >
         <v-icon>mdi-close</v-icon>
       </v-btn>
@@ -100,11 +100,7 @@
               form: {
                   email: '',
                   password: ''
-              },   
-              serverErrors: {
-                status: false,
-                messages: []
-              },      
+              },    
               emailRules: [
                 v => !!v || 'Введите E-mail',
                 v => /.+@.+\..+/.test(v) || 'Некорректный E-mail',
@@ -117,20 +113,6 @@
     computed: {
       errorsFromServer: function () {
           return this.$store.state.auth.errors
-      }
-    },
-    watch: {
-      errorsFromServer: function (newValue) {
-        if (newValue.response) {
-          if (newValue.response.status === 401) {
-            this.serverErrors.messages = 'Неверный логин или пароль'
-          } else {
-            this.serverErrors.messages = newValue
-          }
-        } else {
-          this.serverErrors.messages = newValue
-        }
-        this.serverErrors.status = true
       }
     },
     methods: {

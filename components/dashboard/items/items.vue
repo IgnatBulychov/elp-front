@@ -2,7 +2,13 @@
   <div> 
     <v-card :elevation="2">
       <v-card-text>
-        <v-btn :to="`/dashboard/items/new`" class="ma-2" dark color="teal">
+        <v-btn 
+          :to="`/dashboard/items/new`"
+          class="ma-2" 
+          fab           
+          small
+          icon dark color="teal"
+        >
           <v-icon dark>mdi-plus</v-icon>
         </v-btn>    
 
@@ -64,6 +70,7 @@
                           class="mx-2"
                           fab
                           small
+                          icon
                           color="error"
                           :loading="loadings[index] && $store.state.item.loading"
                         >
@@ -73,9 +80,9 @@
                         <v-btn 
                           :to="`/dashboard/items/${item.id}`"
                           class="mx-2" 
-                          fab 
-                          dark 
-                          small 
+                          fab
+                          small
+                          icon
                           color="warning"
                         >
                           <v-icon dark>mdi-lead-pencil</v-icon>

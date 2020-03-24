@@ -1,14 +1,11 @@
 export const state = () => ({   
     loading: false, 
-    items: [],
+    files: [],
     errors: false
 })
 
 export const getters = {
-    getItem: (state) => (id) => {
-        let item = state.items.find(item => item.id == id)
-        return item
-    },
+   
 }
 
 export const mutations = {
@@ -26,58 +23,50 @@ export const mutations = {
         }
         this.$router.push('/login')
     },
-    updateItems(state, payload) {
-        state.items = payload
+    updateFiles(state, payload) {
+        state.files = payload
         state.loading = false
     }
 }
 
 export const actions = {
-    getItems(context, state) {
+    getFiles(context, state) {
         let app = this
         context.commit('loadingActivate')
-        app.$axios.$get('/api/items')
+        app.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
+        this.$axios.$get('/api/files')
         .then((response) => {
-            context.commit('updateItems', response.items)
+            context.commit('updateFiles', response.files)
+            context.commit('loadingDeactivate')
         })
         .catch((error) => {
             context.commit('failed', error)
             context.commit('loadingDeactivate')
         })
     },
-    newItem(context, formData) {
+    newFile(context, formData) {
         let app = this
         context.commit('loadingActivate')
         app.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
-        app.$axios.$post('/api/items/new', formData)
+        app.$axios.$post('/api/files/new', formData)
         .then(response => {
-            app.$router.push('/dashboard/items')
+            context.dispatch('getFiles')
+            context.commit('loadingDeactivate')
+            app.$router.push('/dashboard/files')
         })
         .catch((error) => {
             context.commit('failed', error)
             context.commit('loadingDeactivate')
         })
     },
-    updateItem(context, [formData, id]) {
+    removeFile(context, id) {
         let app = this
         context.commit('loadingActivate')
         app.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
-        app.$axios.$post('/api/items/update/' + id, formData)
+        this.$axios.$post('/api/files/remove/' + id)
         .then(response => {
-            app.$router.push('/dashboard/items')
-        })
-        .catch((error) => {
-            context.commit('failed', error)
+            context.dispatch('getFiles')
             context.commit('loadingDeactivate')
-        })
-    },
-    removeItem(context, id) {
-        let app = this
-        context.commit('loadingActivate')
-        app.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
-        this.$axios.$post('/api/items/remove/' + id)
-        .then(response => {
-            context.dispatch('getItems')
         })
         .catch((error) => {
             context.commit('failed', error)

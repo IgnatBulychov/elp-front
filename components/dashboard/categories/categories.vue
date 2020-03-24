@@ -2,17 +2,23 @@
   <div> 
     <v-card :elevation="2">
       <v-card-text>
-        <v-btn :to="`/dashboard/categories/new`" class="ma-2" dark color="teal">
-          <v-icon dark>mdi-plus</v-icon>
+        <v-btn
+          :to="`/dashboard/categories/new`" 
+          class="ma-2" 
+          fab
+          small
+          icon 
+          color="teal"
+        ><v-icon dark>mdi-plus</v-icon>
         </v-btn>    
 
         <v-simple-table>
           <template v-slot:default>
             <thead>
-                <tr>
+              <tr>
                 <th class="text-center">Название</th>
                 <th class="text-center">Действия</th>
-                </tr>
+              </tr>
             </thead>
             <tbody>
               <template v-if="!categories.length" > 
@@ -39,54 +45,56 @@
                   </tr>
                 </template>      
               </template>
-              <template v-else>
-                  
+              <template v-else>                  
                 <tr v-for="(category, index) in categories" :key="category.id">
-                    <td>{{ category.title }}</td>
-                    <td class="text-center">
-                        <v-btn  @click="remove(category.id, index)" 
-                          class="mx-2"
-                          fab
-                          small
-                          color="error"
-                          :loading="loadings[index] && $store.state.category.loading"
-                        >
-                          <v-icon dark>mdi-delete-outline</v-icon>
-                        </v-btn>
+                  <td>
+                    {{ category.title }}
+                  </td>
+                  <td class="text-center">
+                      <v-btn  @click="remove(category.id, index)" 
+                        class="mx-2"
+                        fab
+                        small
+                        icon
+                        color="error"
+                        :loading="loadings[index] && $store.state.category.loading"
+                      >
+                        <v-icon dark>mdi-delete-outline</v-icon>
+                      </v-btn>
 
-                        <v-btn 
-                          :to="`/dashboard/categories/${category.id}`"
-                          class="mx-2" 
-                          fab 
-                          dark 
-                          small 
-                          color="warning"
-                        >
-                          <v-icon dark>mdi-lead-pencil</v-icon>
-                        </v-btn>                                    
-                    </td>
-                  </tr>
-                </template>
-              </tbody>
-            </template>
-          </v-simple-table>
-        </v-card-text>
-      </v-card>
-       <v-snackbar
-        v-model="serverErrors.status"
-        :timeout="4000"
+                      <v-btn 
+                        :to="`/dashboard/categories/${category.id}`"
+                        class="mx-2" 
+                        fab
+                        small
+                        icon
+                        color="warning"
+                      >
+                        <v-icon dark>mdi-lead-pencil</v-icon>
+                      </v-btn>                                    
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </template>
+        </v-simple-table>
+      </v-card-text>
+    </v-card>
+      <v-snackbar
+        v-model="errorsFromServer.status"
+        :timeout="5000"
         :top="true"
         color="error"
-      >{{ serverErrors.messages }}
-      <v-btn
-        color="white"
-        text
-        @click="serverErrors.status = false"
-      >
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
+      >{{ errorsFromServer.messages }}
+        <v-btn
+          color="white"
+          text
+          @click="errorsFromServer.status = false"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
       </v-snackbar>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -94,21 +102,11 @@
         name: 'categories',
         data() {
             return {
-                currentRemoving: -1,
-                serverErrors: {
-                  status: false,
-                  messages: []
-                },  
+                currentRemoving: -1  
             };
         },
         mounted() {
           this.$store.dispatch('category/getCategories')
-        },
-        watch: {
-          errorsFromServer: function (newValue) {
-            this.serverErrors.messages = newValue
-            this.serverErrors.status = true
-          }
         },
         computed: {
             categories() {
@@ -126,7 +124,7 @@
               return loadings
             },
             errorsFromServer: function () {
-                return this.$store.state.category.errors
+              return this.$store.state.category.errors
             }
         },
         methods: {
@@ -142,41 +140,4 @@
 .theme--light.v-btn {
     color: white
 }
-/*
-.custom-loader {
-    animation: loader 1s infinite;
-    display: flex;
-  }
-  @-moz-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  @-webkit-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  @-o-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  @keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }*/
 </style>
