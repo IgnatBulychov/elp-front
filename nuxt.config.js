@@ -25,6 +25,6 @@ module.exports = {
     ],
    
     axios: {
-      baseURL: 'http://elp-back.qq' ,
+      baseURL: 'http://elp-back.qq' ,  // set your URL of laravel API by ELP-backend 
     }
 }

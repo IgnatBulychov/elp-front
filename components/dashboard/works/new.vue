@@ -6,29 +6,19 @@
           @submit.prevent="add"
           ref="form"
         >
-          <v-select
-            v-model="selectedCategories"
-            :items="categories"
-            no-data-text="Категории не найдены"
-            label="Категории"
-            multiple
-            chips
-            persistent-hint
-          ></v-select>
-
           <v-text-field
-            v-model="item.title"
+            v-model="work.title"
             :rules="titleRules"
             required
-            :disabled="$store.state.item.loading"
+            :disabled="$store.state.work.loading"
             label="Название записи"
           ></v-text-field>
 
           <v-textarea
-            v-model="item.description"
+            v-model="work.description"
             :rules="descriptionRules"
             required
-            :disabled="$store.state.item.loading"
+            :disabled="$store.state.work.loading"
           >
             <template v-slot:label>
               <div>
@@ -37,27 +27,22 @@
             </template>
           </v-textarea>
 
-          <v-text-field
-            v-model="item.cost"
-            :rules="costRules"
-            required
-            :disabled="$store.state.item.loading"
-            label="Цена"
-          ></v-text-field>
-
+          <selectFiles/> 
+          
+          <br>
 
           <v-btn
-            @click="$router.push('/dashboard/items')"  
+            @click="$router.push('/dashboard/works')"  
+            class="my-2 mx-1"
             color="secondary"
-            :disabled="$store.state.item.loading"
-            class="mr-4"
+            :disabled="$store.state.work.loading"
           >Отмена</v-btn>
 
           <v-btn
             type="submit"
             color="teal"
-            class="mr-4"
-            :disabled="$store.state.item.loading"
+            class="my-2 mx-1"
+            :disabled="$store.state.work.loading"
           >Добавить</v-btn>
         </v-form>
       </v-card-text>
@@ -68,19 +53,20 @@
 
 <script>
 import serverSideErrors from '~/components/serverSideErrors.vue'
+import selectFiles from '~/components/dashboard/files/selectFiles.vue'
+
 export default {
-  name: 'newItem',
+  name: 'newWork',
   components: {
-    serverSideErrors
+    serverSideErrors, selectFiles
   },
   data() {
       return {
-          item: {
+          work: {
               title: '',
               description: '',
-              cost: ''
           },
-          selectedCategories: null,
+          //selectedCategories: null,
           titleRules: [
             v => !!v || 'Название - обязательное поле',
             v => (v && v.length <= 256) || 'Название слишком длинное',
@@ -88,30 +74,15 @@ export default {
           descriptionRules: [
             v => !!v || 'Описание - обязательное поле',
             v => (v && v.length <= 2048) || 'Описание слишком длинное',
-          ],
-          costRules: [
-            v => !!v || 'Цена - обязательное поле',
-            v => (v && v.length <= 25) || 'Кажеться цена слишком большая',
           ]
       }
   },
   mounted() {
-    this.$store.dispatch('category/getCategories')
+    this.$store.dispatch('work/getWorks')
   },
   computed: {
-    categories() {
-      let categories = []
-      this.$store.state.category.categories.forEach(function(item, i, arr) {
-        let category = {  
-          text: item.title,
-          value: item.id
-        }
-        categories.push(category)
-      })    
-      return categories
-    },
     errorsFromServer: function () {
-          return this.$store.state.item.errors
+          return this.$store.state.work.errors
     }
   },
   methods: {
@@ -119,12 +90,11 @@ export default {
       let app = this      
       if (this.$refs.form.validate()) {            
         const formData = new FormData();
-        formData.append("item", JSON.stringify(this.item))
-        formData.append("categories", JSON.stringify(this.selectedCategories))
-        app.$store.dispatch('item/newItem', formData)  
+        formData.append("work", JSON.stringify(this.work))
+        app.$store.dispatch('work/newWork', formData)  
         this.$refs.form.resetValidation()
       } else {
-        this.$store.commit('item/loadingDeactivate')
+        this.$store.commit('work/loadingDeactivate')
       }
     },
   }

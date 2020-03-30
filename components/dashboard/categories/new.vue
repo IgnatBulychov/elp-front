@@ -18,45 +18,28 @@
             @click="$router.push('/dashboard/categories')"  
             color="secondary"
             :disabled="$store.state.category.loading"
-            class="mr-4"
           >Отмена</v-btn>
 
           <v-btn
             type="submit"
             color="teal"
-            class="mr-4"
             :disabled="$store.state.category.loading"
           >Добавить</v-btn>
 
         </v-form>
       </v-card-text>
-    </v-card>  
-    <v-snackbar
-        v-model="errorsFromServer.status"
-        :timeout="5000"
-        :top="true"
-        color="error"
-      >
-      <ul>
-        <li v-for="error in errorsFromServer.messages" :key="error.id">
-          {{ error }}
-        </li>
-      </ul>
-      
-      <v-btn
-        color="white"
-        text
-        @click="errorsFromServer.status = false"
-      >
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
-    </v-snackbar>
+    </v-card>      
+    <serverSideErrors :errors="errorsFromServer"/>
   </div>
 </template>
 
 <script>
+import serverSideErrors from '~/components/serverSideErrors.vue'
 export default {
   name: 'newCategory',
+  components: {
+    serverSideErrors
+  },
   data() {
       return {
           category: {

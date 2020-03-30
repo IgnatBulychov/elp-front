@@ -1,7 +1,10 @@
 export const state = () => ({   
     loading: false, 
     files: [],
-    errors: false
+    errors: {
+        status: false,
+        messages: []
+    }
 })
 
 export const getters = {
@@ -16,12 +19,35 @@ export const mutations = {
         state.loading = false
     },
     failed (state, error) {
-        if (state.errors.status == 401) {
-            state.errors = 'Сессия истекла'
+        console.log(1)
+        state.errors.messages = []
+        if (error.response) {
+            switch (error.response.status) {
+                case 401:
+                    state.errors.messages.push('Время сессии истекло')
+                    this.$router.push('/login')   
+                    break;
+                case 400:
+                    console.log(400)
+                    JSON.parse(error.response.data.errors).forEach(function(item, i, arr) {
+                        state.errors.messages.push(item)
+                    });  
+                    state.errors.status = true
+                    break;
+                case 500:
+                    state.errors.status = true
+                    state.errors.messages.push('Неверный запрос')
+                    break;
+                default:
+                    console.log(3)
+                    state.errors.status = true
+                    state.errors.messages.push(error)
+            }
         } else {
-            state.errors = error
-        }
-        this.$router.push('/login')
+            console.log(1)
+            state.errors.status = true
+            state.errors.messages.push(error)
+        }  
     },
     updateFiles(state, payload) {
         state.files = payload
@@ -60,9 +86,8 @@ export const actions = {
         })
     },
     removeFile(context, id) {
-        let app = this
         context.commit('loadingActivate')
-        app.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
+        this.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
         this.$axios.$post('/api/files/remove/' + id)
         .then(response => {
             context.dispatch('getFiles')

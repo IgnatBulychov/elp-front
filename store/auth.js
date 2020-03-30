@@ -23,6 +23,7 @@ export const mutations = {
     authFailed (state, error) {
         state.loading = false
         state.user = null
+        state.errors.messages = []
         if (error.response) {
             if (error.response.status == 401) {
               state.errors.status = true

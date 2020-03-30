@@ -21,21 +21,33 @@ export const mutations = {
     loadingDeactivate(state) {
         state.loading = false
     },
-    failed (state, error) {  
+    failed (state, error) {
+        console.log(1)
+        state.errors.messages = []
         if (error.response) {
-            if (error.response.status === 401) {
-              state.errors.messages.push('Время сессии истекло')
-              this.$router.push({path: '/login'})   
-            } else if (error.response.status === 400) {
-                JSON.parse(error.response.data.errors).forEach(function(item, i, arr) {
-                    state.errors.messages.push(item)
-                });  
-                state.errors.status = true
-            } else {
-                state.errors.status = true
-                state.errors.messages.push(error)
+            switch (error.response.status) {
+                case 401:
+                    state.errors.messages.push('Время сессии истекло')
+                    this.$router.push('/login')   
+                    break;
+                case 400:
+                    console.log(400)
+                    JSON.parse(error.response.data.errors).forEach(function(item, i, arr) {
+                        state.errors.messages.push(item)
+                    });  
+                    state.errors.status = true
+                    break;
+                case 500:
+                    state.errors.status = true
+                    state.errors.messages.push('Неверный запрос')
+                    break;
+                default:
+                    console.log(3)
+                    state.errors.status = true
+                    state.errors.messages.push(error)
             }
         } else {
+            console.log(1)
             state.errors.status = true
             state.errors.messages.push(error)
         }  

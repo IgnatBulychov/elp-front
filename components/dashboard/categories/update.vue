@@ -6,7 +6,7 @@
           @submit.prevent="update"
           ref="form"
         >
-           <v-text-field
+          <v-text-field
             v-model="category.title"
             :rules="titleRules"
             required
@@ -18,45 +18,28 @@
             @click="$router.push('/dashboard/categories')"  
             color="secondary"
             :disabled="$store.state.category.loading"
-            class="mr-4"
           >Отмена</v-btn>
 
           <v-btn
             type="submit"
             color="teal"
-            class="mr-4"
             :disabled="$store.state.category.loading"
           >Изменить</v-btn>
 
         </v-form>
       </v-card-text>
-    </v-card>
-     <v-snackbar
-        v-model="errorsFromServer.status"
-        :timeout="5000"
-        :top="true"
-        color="error"
-      >
-      <ul>
-        <li v-for="error in errorsFromServer.messages" :key="error.id">
-          {{ error }}
-        </li>
-      </ul>
-      
-      <v-btn
-        color="white"
-        text
-        @click="errorsFromServer.status = false"
-      >
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
-    </v-snackbar>
+    </v-card>    
+    <serverSideErrors :errors="errorsFromServer"/>
   </div>
 </template>
 
 <script>
+import serverSideErrors from '~/components/serverSideErrors.vue'
 export default {
   name: 'updateCategory',
+  components: {
+    serverSideErrors
+  },
   data() {
       return {
           category: {
@@ -74,10 +57,10 @@ export default {
     } else {
         this.$store.commit('category/loadingActivate')
         this.$axios.$get(`/api/categories/${this.$route.params.id}`)
-            .then((response) => {
-                this.category = response.category
-                this.$store.commit('category/loadingDeactivate')
-            });
+        .then((response) => {
+            this.category = response.category
+            this.$store.commit('category/loadingDeactivate')
+        });
     }
   },
   computed: {

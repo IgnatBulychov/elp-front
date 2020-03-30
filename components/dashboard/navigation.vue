@@ -35,12 +35,21 @@
 <v-list-item-group color="teal">
         
 
-         <v-list-item :to="{path:'/dashboard/portfolio'}">
+         <v-list-item :to="{path:'/dashboard/works'}">
           <v-list-item-icon>
             <v-icon>mdi-image-multiple-outline</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Портфолио</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item :to="{path:'/dashboard/files'}">
+          <v-list-item-icon>
+            <v-icon>mdi-image-outline</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Файлы</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -62,14 +71,7 @@
           </v-list-item-content>
         </v-list-item>
 
-         <v-list-item :to="{path:'/dashboard/files'}">
-          <v-list-item-icon>
-            <v-icon>mdi-image-outline</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Файлы</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+        
 
           <v-list-item :to="{path:'/dashboard/settings'}">
           <v-list-item-icon>

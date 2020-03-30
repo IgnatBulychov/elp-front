@@ -1,13 +1,10 @@
 <template>
-<v-app>
-
-  <v-navigation-drawer
-    app 
-    mobile-break-point="720" 
-    v-model="drawer"
-  > 
-
- 
+  <v-app>
+    <v-navigation-drawer
+      app 
+      mobile-break-point="720" 
+      v-model="drawer"
+    > 
       <v-list-item>
         <v-btn  
           v-if="drawer"
@@ -32,7 +29,7 @@
 
       <navigation></navigation>
 
-<template v-slot:append>
+      <template v-slot:append>
         <div class="pa-2">
           <v-btn block :to="`/`" > Сайт
             <v-icon>mdi-open-in-new</v-icon></v-btn>
@@ -45,63 +42,47 @@
       
     </v-navigation-drawer>
 
-  <v-app-bar app >
+    <v-app-bar app >
+      <v-btn
+        v-if="!drawer"
+        color="teal"
+        @click.stop="drawer = !drawer"
+        icon
+        >
+        <v-icon>mdi-menu</v-icon>
+      </v-btn>
 
-
- <v-btn
-    v-if="!drawer"
-    color="teal"
-    @click.stop="drawer = !drawer"
-    icon
-    >
-    <v-icon>mdi-menu</v-icon>
- </v-btn>
-
-<div class="flex-grow-1">
-
-</div>
-<v-toolbar-items>
-
+    <div class="flex-grow-1">
+    </div>
+    <v-toolbar-items>
     </v-toolbar-items>
-
-
-
-  
-  
-  </v-app-bar>
-
-  <!-- Sizes your content based upon application components -->
-  <v-content>
-
-    <!-- Provides the application the proper gutter -->
-    <v-container fluid>
-        <router-view></router-view>
-    </v-container>
-  </v-content>
-
-  <v-footer app>
-    <!-- -->
-  </v-footer>
-</v-app>
-
+    </v-app-bar>
+    <v-content>
+      <v-container fluid>
+          <router-view></router-view>
+      </v-container>
+    </v-content>
+    <v-footer app>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
-    import navigation from './navigation.vue'
-    export default {
-        name: 'dashboard',
-        components: {
-          navigation
-        },
-        data () {
-            return {
-                     drawer: true,
-                }
-        },
-        methods: {
-            logout() {
-                this.$store.dispatch('auth/logout')
-            }            
-        }
+import navigation from './navigation.vue'
+export default {
+    name: 'dashboard',
+    components: {
+      navigation
+    },
+    data () {
+        return {
+                  drawer: true,
+            }
+    },
+    methods: {
+        logout() {
+            this.$store.dispatch('auth/logout')
+        }            
     }
+}
 </script>

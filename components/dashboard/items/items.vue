@@ -4,12 +4,12 @@
       <v-card-text>
         <v-btn 
           :to="`/dashboard/items/new`"
-          class="ma-2" 
           fab           
           small
-          icon dark color="teal"
+          icon 
+          color="teal"
         >
-          <v-icon dark>mdi-plus</v-icon>
+          <v-icon>mdi-plus</v-icon>
         </v-btn>    
 
         <v-simple-table>
@@ -27,14 +27,15 @@
               <template v-if="!items.length" > 
                 <template v-if="$store.state.item.loading"> 
                   <tr>
-                    <td colspan="5" class="text-center">
-                      <div  class="text-center">
-                        <v-progress-circular
-                            :size="30"
-                            color="teal"
-                            indeterminate
-                        ></v-progress-circular>
-                      </div>
+                    <td colspan="5">
+                      <v-row  v-for="n in 3" :key="n" >
+                        <v-col>
+                          <v-skeleton-loader
+                            class="mx-auto"
+                            type="list-item-two-line"
+                          ></v-skeleton-loader>
+                        </v-col>
+                      </v-row>
                     </td>
                   </tr>
                 </template>
@@ -42,7 +43,7 @@
                   <tr>
                     <td colspan="5" class="text-center">
                         <div  class="text-center">
-                        Пока записей нет
+                          Пока записей нет
                         </div>
                     </td>
                   </tr>
@@ -51,9 +52,30 @@
               <template v-else>
                   
                 <tr v-for="(item, index) in items" :key="item.id">
-                    <td>{{ item.title }}</td>
-                    <td>{{ item.description }}</td>
-                    <td>{{ item.cost }}</td>
+                    <td>
+                      <span
+                      class="d-inline-block text-truncate"
+                      style="max-width: 50px;"
+                      >
+                        {{ item.title }}
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                      class="d-inline-block text-truncate"
+                      style="max-width: 50px;"
+                      >
+                        {{ item.description }}
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                      class="d-inline-block text-truncate"
+                      style="max-width: 50px;"
+                      >
+                        {{ item.cost }}
+                      </span>
+                    </td>
                     <td>
                       <v-chip
                         v-for="category in item.categories" :key="category.id"
@@ -67,11 +89,11 @@
                     </td>
                     <td class="text-center">
                         <v-btn  @click="remove(item.id, index)" 
-                          class="mx-2"
                           fab
                           small
                           icon
                           color="error"
+                          :disabled="loadings[index] && $store.state.item.loading"
                           :loading="loadings[index] && $store.state.item.loading"
                         >
                           <v-icon dark>mdi-delete-outline</v-icon>
@@ -79,7 +101,7 @@
 
                         <v-btn 
                           :to="`/dashboard/items/${item.id}`"
-                          class="mx-2" 
+                          :disabled="loadings[index] && $store.state.item.loading"
                           fab
                           small
                           icon
@@ -95,70 +117,51 @@
           </v-simple-table>
         </v-card-text>
       </v-card>
-       <v-snackbar
-        v-model="serverErrors.status"
-        :timeout="4000"
-        :top="true"
-        color="error"
-      >{{ serverErrors.messages }}
-      <v-btn
-        color="white"
-        text
-        @click="serverErrors.status = false"
-      >
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
-      </v-snackbar>
+      <serverSideErrors :errors="errorsFromServer"/>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'items',
-        data() {
-            return {
-                currentRemoving: -1,
-                serverErrors: {
-                  status: false,
-                  messages: []
-                },  
-            };
+import serverSideErrors from '~/components/serverSideErrors.vue'
+export default {
+    name: 'items',
+    components: {
+      serverSideErrors
+    },
+    data() {
+        return {
+            currentRemoving: -1  
+        };
+    },
+    mounted() {
+      this.$store.dispatch('item/getItems')
+    },
+    computed: {
+        items() {
+          return this.$store.state.item.items
         },
-        mounted() {
-          this.$store.dispatch('item/getItems')
-        },
-        watch: {
-          errorsFromServer: function (newValue) {
-            this.serverErrors.messages = newValue
-            this.serverErrors.status = true
+        loadings() {
+          let loadings = {}
+          for (let i = 0; i < this.items.length; i++) { 
+            if (this.currentRemoving == i) {
+              loadings[i] = true
+            } else {
+              loadings[i] = false
+            }   
           }
+          return loadings
         },
-        computed: {
-            items() {
-              return this.$store.state.item.items
-            },
-            loadings() {
-              let loadings = {}
-              for (let i = 0; i < this.items.length; i++) { 
-                if (this.currentRemoving == i) {
-                  loadings[i] = true
-                } else {
-                  loadings[i] = false
-                }   
-              }
-              return loadings
-            },
-            errorsFromServer: function () {
-                return this.$store.state.item.errors
-            }
-        },
-        methods: {
-            remove(id, index) {
-                this.currentRemoving = index
-                this.$store.dispatch('item/removeItem', id)
-            }
+        errorsFromServer: function () {
+            return this.$store.state.item.errors
+        }
+    },
+    methods: {
+        remove(id, index) {
+            this.currentRemoving = index
+            this.$store.dispatch('item/removeItem', id)
         }
     }
+}
 </script>
 
 <style scoped>

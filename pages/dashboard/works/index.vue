@@ -1,16 +1,15 @@
 <template>
-   <dashboard/>
+  <works/>
 </template>
 
 <script>
-import dashboard from '~/components/dashboard/dashboard.vue'
+import works from '~/components/dashboard/works/works.vue'
 
 export default {
   layout: 'dashboard',
   middleware: 'authenticated',
   components: {
-    dashboard
+    works
   }
-  
 }
 </script>

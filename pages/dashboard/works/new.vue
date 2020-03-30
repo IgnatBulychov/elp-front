@@ -1,15 +1,15 @@
 <template>
-   <dashboard/>
+  <newWork/>
 </template>
 
 <script>
-import dashboard from '~/components/dashboard/dashboard.vue'
+import newWork from '~/components/dashboard/works/new.vue'
 
 export default {
   layout: 'dashboard',
   middleware: 'authenticated',
   components: {
-    dashboard
+    newWork
   }
   
 }
