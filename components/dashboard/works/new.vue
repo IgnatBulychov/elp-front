@@ -27,9 +27,34 @@
             </template>
           </v-textarea>
 
-          <selectFiles/> 
-          
+
+          <span color="secondary" class="body-1 my-2">Файлы:</span>         
           <br>
+          
+          <selectFiles @imagesSelected="setImages"/> 
+
+          <br>
+
+          <v-row>
+            <v-col v-for="(file, key) in files" :key="file.id" cols="2">
+              <v-card>
+                <v-img :src='$axios.defaults.baseURL + file.src.replace("public","/storage")'></v-img>
+               <v-card-actions>
+                    <v-spacer></v-spacer>             
+                      <v-btn  @click="removeImage(key)" 
+                        class="mx-2"
+                        fab
+                        small
+                        icon
+                        color="error"
+                        
+                      >
+                        <v-icon dark>mdi-delete-outline</v-icon>
+                      </v-btn>
+                    </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
 
           <v-btn
             @click="$router.push('/dashboard/works')"  
@@ -66,7 +91,7 @@ export default {
               title: '',
               description: '',
           },
-          //selectedCategories: null,
+          files: [],
           titleRules: [
             v => !!v || 'Название - обязательное поле',
             v => (v && v.length <= 256) || 'Название слишком длинное',
@@ -76,9 +101,6 @@ export default {
             v => (v && v.length <= 2048) || 'Описание слишком длинное',
           ]
       }
-  },
-  mounted() {
-    this.$store.dispatch('work/getWorks')
   },
   computed: {
     errorsFromServer: function () {
@@ -97,6 +119,13 @@ export default {
         this.$store.commit('work/loadingDeactivate')
       }
     },
+    setImages(imgs) {
+      this.files = imgs
+    },
+    removeImage(id) {
+      console.log(this.files)
+      this.files = this.files.splice(id, 1)
+    }
   }
 } 
 </script>
