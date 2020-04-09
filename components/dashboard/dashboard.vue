@@ -16,7 +16,7 @@
         </v-btn>
         <v-list-item-content>
           <v-list-item-title class="title">
-            Личный кабинет
+            Управление
           </v-list-item-title>
           <v-list-item-subtitle>
            {{/*currentUser.name */}}

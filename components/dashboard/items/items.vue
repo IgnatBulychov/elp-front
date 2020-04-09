@@ -12,113 +12,106 @@
           <v-icon>mdi-plus</v-icon>
         </v-btn>    
 
-        <v-simple-table>
-          <template v-slot:default>
-            <thead>
+        <template v-if="!items.length" > 
+          <template v-if="$store.state.item.loading"> 
+            <v-row  v-for="n in 3" :key="n" >
+              <v-col>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+              </v-col>
+            </v-row>
+          </template>
+          <template v-else>
+            <v-row  v-for="n in 3" :key="n">
+              <v-col>
+                Пока записей нет
+              </v-col>
+            </v-row>
+          </template>      
+        </template>
+        <template v-else>
+          <v-simple-table>
+            <template v-slot:default>
+              <thead>
                 <tr>
-                <th class="text-center">Название</th>
-                <th class="text-center">Описание</th>
-                <th class="text-center">Цена</th>
-                <th class="text-center">Категории</th>
-                <th class="text-center">Действия</th>
+                  <th class="text-center">Название</th>
+                  <th class="text-center">Описание</th>
+                  <th class="text-center">Цена</th>
+                  <th class="text-center">Категории</th>
+                  <th class="text-center">Действия</th>
                 </tr>
-            </thead>
-            <tbody>
-              <template v-if="!items.length" > 
-                <template v-if="$store.state.item.loading"> 
-                  <tr>
-                    <td colspan="5">
-                      <v-row  v-for="n in 3" :key="n" >
-                        <v-col>
-                          <v-skeleton-loader
-                            class="mx-auto"
-                            type="list-item-two-line"
-                          ></v-skeleton-loader>
-                        </v-col>
-                      </v-row>
-                    </td>
-                  </tr>
-                </template>
-                <template v-else>
-                  <tr>
-                    <td colspan="5" class="text-center">
-                        <div  class="text-center">
-                          Пока записей нет
-                        </div>
-                    </td>
-                  </tr>
-                </template>      
-              </template>
-              <template v-else>
-                  
+              </thead>
+              <tbody>       
                 <tr v-for="(item, index) in items" :key="item.id">
-                    <td>
-                      <span
-                      class="d-inline-block text-truncate"
-                      style="max-width: 50px;"
+                  <td>
+                    <span
+                    class="d-inline-block text-truncate"
+                    style="max-width: 50px;"
+                    >
+                      {{ item.title }}
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                    class="d-inline-block text-truncate"
+                    style="max-width: 50px;"
+                    >
+                      {{ item.description }}
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                    class="d-inline-block text-truncate"
+                    style="max-width: 50px;"
+                    >
+                      {{ item.cost }}
+                    </span>
+                  </td>
+                  <td>
+                    <v-chip
+                      v-for="category in item.categories" :key="category.id"
+                      class="ma-2"
+                      color="teal"
+                      text-color="white"
+                    >
+                        {{ category.title }}
+                    </v-chip>
+                    
+                  </td>
+                  <td class="text-center">
+                      <v-btn  @click="remove(item.id, index)" 
+                        fab
+                        small
+                        icon
+                        color="error"
+                        :disabled="loadings[index] && $store.state.item.loading"
+                        :loading="loadings[index] && $store.state.item.loading"
                       >
-                        {{ item.title }}
-                      </span>
-                    </td>
-                    <td>
-                      <span
-                      class="d-inline-block text-truncate"
-                      style="max-width: 50px;"
-                      >
-                        {{ item.description }}
-                      </span>
-                    </td>
-                    <td>
-                      <span
-                      class="d-inline-block text-truncate"
-                      style="max-width: 50px;"
-                      >
-                        {{ item.cost }}
-                      </span>
-                    </td>
-                    <td>
-                      <v-chip
-                        v-for="category in item.categories" :key="category.id"
-                        class="ma-2"
-                        color="teal"
-                        text-color="white"
-                      >
-                         {{ category.title }}
-                      </v-chip>
-                     
-                    </td>
-                    <td class="text-center">
-                        <v-btn  @click="remove(item.id, index)" 
-                          fab
-                          small
-                          icon
-                          color="error"
-                          :disabled="loadings[index] && $store.state.item.loading"
-                          :loading="loadings[index] && $store.state.item.loading"
-                        >
-                          <v-icon dark>mdi-delete-outline</v-icon>
-                        </v-btn>
+                        <v-icon dark>mdi-delete-outline</v-icon>
+                      </v-btn>
 
-                        <v-btn 
-                          :to="`/dashboard/items/${item.id}`"
-                          :disabled="loadings[index] && $store.state.item.loading"
-                          fab
-                          small
-                          icon
-                          color="warning"
-                        >
-                          <v-icon dark>mdi-lead-pencil</v-icon>
-                        </v-btn>                                    
-                    </td>
-                  </tr>
-                </template>
+                      <v-btn 
+                        :to="`/dashboard/items/${item.id}`"
+                        :disabled="loadings[index] && $store.state.item.loading"
+                        fab
+                        small
+                        icon
+                        color="warning"
+                      >
+                        <v-icon dark>mdi-lead-pencil</v-icon>
+                      </v-btn>                                    
+                  </td>
+                </tr>
               </tbody>
             </template>
           </v-simple-table>
-        </v-card-text>
-      </v-card>
-      <serverSideErrors :errors="errorsFromServer"/>
-    </div>
+        </template>
+      </v-card-text>
+    </v-card>
+    <serverSideErrors :errors="errorsFromServer"/>
+  </div>
 </template>
 
 <script>

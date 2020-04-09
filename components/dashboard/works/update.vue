@@ -3,7 +3,7 @@
     <v-card :elevation="2">
       <v-card-text>
         <v-form
-          @submit.prevent="add"
+          @submit.prevent="update"
           ref="form"
         >
           <v-text-field
@@ -27,7 +27,6 @@
             </template>
           </v-textarea>
 
-
           <span color="secondary" class="body-1 my-2">Файлы:</span>         
           <br>
           
@@ -42,17 +41,12 @@
           <br>
 
           <v-row>
-            <v-col v-for="(file, key) in files" :key="file.id" 
-              cols="6"
-              sm="4"
-              md="3"
-              lg="2"
-            >
+            <v-col v-for="(file, key) in files" :key="file.id" cols="2">
               <v-card>
                 <v-img :src='$axios.defaults.baseURL + file.src.replace("public","/storage")'></v-img>
-               <v-card-actions>
+                <v-card-actions>
                   <v-spacer></v-spacer>             
-                    <v-btn  @click="removeImage(key)" 
+                    <v-btn @click="removeImage(key)" 
                       class="mx-2"
                       fab
                       small
@@ -62,14 +56,14 @@
                     >
                       <v-icon dark>mdi-delete-outline</v-icon>
                     </v-btn>
-                  </v-card-actions>
+                </v-card-actions>
               </v-card>
             </v-col>
           </v-row>
 
           <v-btn
             @click="$router.push('/dashboard/works')"  
-            class="my-2 mr-1"
+            class="my-2 mx-1"
             color="secondary"
             :disabled="$store.state.work.loading"
           >Отмена</v-btn>
@@ -79,7 +73,7 @@
             color="teal"
             class="my-2 mx-1"
             :disabled="$store.state.work.loading"
-          >Добавить</v-btn>
+          >Изменить</v-btn>
 
         </v-form>
       </v-card-text>
@@ -93,7 +87,7 @@ import serverSideErrors from '~/components/serverSideErrors.vue'
 import selectFiles from '~/components/dashboard/files/selectFiles.vue'
 
 export default {
-  name: 'newWork',
+  name: 'updateWork',
   components: {
     serverSideErrors, selectFiles
   },
@@ -103,7 +97,7 @@ export default {
               title: '',
               description: '',
           },
-          files: [],
+          files: [],          
           dialog: false,
           titleRules: [
             v => !!v || 'Название - обязательное поле',
@@ -117,11 +111,25 @@ export default {
   },
   computed: {
     errorsFromServer: function () {
-          return this.$store.state.work.errors
+      return this.$store.state.work.errors
+    }
+  },
+  created() {        
+    if (this.$store.state.work.works.length) {
+        this.work = this.$store.getters['work/getWork'](this.$route.params.id)
+        this.files = this.work.files
+    } else {
+        this.$store.commit('work/loadingActivate')
+        this.$axios.$get(`/api/works/${this.$route.params.id}`)
+        .then((response) => {
+            this.work = response.work
+            this.files = response.work.files
+            this.$store.commit('work/loadingDeactivate')
+        });
     }
   },
   methods: {
-    add() {
+    update() {
       let app = this      
       if (this.$refs.form.validate()) {            
         const formData = new FormData();
@@ -129,9 +137,10 @@ export default {
         this.files.forEach(function(item, i, arr) {
           files.push(item.id)
         })
-        this.work.files = this.files  
+        this.work.files = this.files
         formData.append("work", JSON.stringify(this.work))
-        app.$store.dispatch('work/newWork', formData)  
+        
+        app.$store.dispatch('work/updateWork', [formData, app.$route.params.id])  
         this.$refs.form.resetValidation()
       } else {
         this.$store.commit('work/loadingDeactivate')

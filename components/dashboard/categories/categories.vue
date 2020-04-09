@@ -11,41 +11,35 @@
         ><v-icon dark>mdi-plus</v-icon>
         </v-btn>    
 
-        <v-simple-table>
-          <template v-slot:default>
-            <thead>
-              <tr>
-                <th class="text-center">Название</th>
-                <th class="text-center">Действия</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="!categories.length" > 
-                <template v-if="$store.state.category.loading"> 
-                  <tr>
-                    <td colspan="3">
-                      <v-row  v-for="n in 3" :key="n" >
-                        <v-col>
-                          <v-skeleton-loader
-                            class="mx-auto"
-                            type="list-item-two-line"
-                          ></v-skeleton-loader>
-                        </v-col>
-                      </v-row>
-                    </td>
-                  </tr>
-                </template>
-                <template v-else>
-                  <tr>
-                    <td colspan="3" class="text-center">
-                        <div  class="text-center">
-                        Пока категорий нет
-                        </div>
-                    </td>
-                  </tr>
-                </template>      
-              </template>
-              <template v-else>                  
+        <template v-if="!categories.length" > 
+          <template v-if="$store.state.category.loading"> 
+            <v-row  v-for="n in 3" :key="n" >
+              <v-col>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+              </v-col>
+            </v-row>
+          </template>
+          <template v-else>
+            <v-row>
+              <v-col class="text-center">
+                Пока категорий нет
+              </v-col>
+            </v-row>
+          </template>      
+        </template>
+        <template v-else> 
+          <v-simple-table>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-center">Название</th>
+                  <th class="text-center">Действия</th>
+                </tr>
+              </thead>
+              <tbody>
                 <tr v-for="(category, index) in categories" :key="category.id">
                   <td>
                     <span
@@ -80,10 +74,10 @@
                       </v-btn>                                    
                   </td>
                 </tr>
-              </template>
-            </tbody>
-          </template>
-        </v-simple-table>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </template>       
       </v-card-text>
     </v-card>
     <serverSideErrors :errors="errorsFromServer"/>

@@ -46,7 +46,12 @@
         <template v-if="!files.length" > 
           <template v-if="$store.state.file.loading"> 
             <v-row>
-              <v-col v-for="n in 3" :key="n" cols="4">
+              <v-col v-for="n in 3" :key="n"
+                cols="12"
+                sm="6"
+                md="4"
+                lg="3"
+              >
                 <v-skeleton-loader
                   class="mx-auto"
                   type="card"
@@ -65,7 +70,10 @@
             <v-row dense>
               <v-col
                 v-for="(file, index) in files" :key="file.id"
-                :cols="4"
+                cols="12"
+                sm="6"
+                md="4"
+                lg="3"
               >
                 <v-card>
                   <v-img

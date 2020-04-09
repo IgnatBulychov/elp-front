@@ -10,44 +10,37 @@
           color="teal"
         ><v-icon dark>mdi-plus</v-icon>
         </v-btn>    
-
-        <v-simple-table>
-          <template v-slot:default>
-            <thead>
-              <tr>
-                <th class="text-center">Название</th>
-                <th class="text-center">Описание</th>
-                <th class="text-center">Файлы</th>
-                <th class="text-center">Действия</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="!works.length" > 
-                <template v-if="$store.state.work.loading"> 
-                  <tr>
-                    <td colspan="4">
-                       <v-row  v-for="n in 3" :key="n" >
-                        <v-col>
-                          <v-skeleton-loader
-                            class="mx-auto"
-                            type="list-item-two-line"
-                          ></v-skeleton-loader>
-                        </v-col>
-                      </v-row>
-                    </td>
-                  </tr>
-                </template>
-                <template v-else>
-                  <tr>
-                    <td colspan="4" class="text-center">
-                        <div  class="text-center">
-                        Пока записей в портфолио нет
-                        </div>
-                    </td>
-                  </tr>
-                </template>      
-              </template>
-              <template v-else>                  
+        <template v-if="!works.length" > 
+          <template v-if="$store.state.work.loading"> 
+              <v-row  v-for="n in 3" :key="n" >
+                <v-col>
+                  <v-skeleton-loader
+                    class="mx-auto"
+                    type="list-item-two-line"
+                  ></v-skeleton-loader>
+                </v-col>
+              </v-row>
+          </template>
+          <template v-else>
+            <v-row>
+              <v-col class="text-center">
+                Пока записей в портфолио нет
+              </v-col>
+            </v-row>
+          </template>      
+        </template>
+        <template v-else> 
+          <v-simple-table>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-center">Название</th>
+                  <th class="text-center">Описание</th>
+                  <th class="text-center">Количество файлов</th>
+                  <th class="text-center">Действия</th>
+                </tr>
+              </thead>
+              <tbody>
                 <tr v-for="(work, index) in works" :key="work.id">
                   <td>
                     <span
@@ -67,10 +60,14 @@
                   </td>
                   <td>
                     <span
+                      v-if="work.files.length"
                       class="d-inline-block text-truncate"
                       style="max-width: 120px;"
                     >
-                      {{ work.files }}
+                      {{ work.files.length }}
+                    </span>
+                    <span v-else>
+                      Файлов нет
                     </span>
                   </td>
                   <td class="text-center">
@@ -98,10 +95,10 @@
                       </v-btn>                                    
                   </td>
                 </tr>
-              </template>
-            </tbody>
-          </template>
-        </v-simple-table>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </template>  
       </v-card-text>
     </v-card>
     <serverSideErrors :errors="errorsFromServer"/>
