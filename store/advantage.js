@@ -1,6 +1,6 @@
 export const state = () => ({   
     loading: false, 
-    categories: [],
+    advantages: [],
     errors: {
         status: false,
         messages: []
@@ -8,9 +8,9 @@ export const state = () => ({
 })
 
 export const getters = {
-    getCategory: (state) => (id) => {
-        let category = state.categories.find(category => category.id == id)
-        return category
+    getAdvantage: (state) => (id) => {
+        let advantage = state.advantages.find(advantage => advantage.id == id)
+        return advantage
     },
 }
 
@@ -56,61 +56,61 @@ export const mutations = {
         state.errors.status = false
         state.errors.messages = []
     },
-    updateCategories(state, payload) {
-        state.categories = payload
+    updateAdvantages(state, payload) {
+        state.advantages = payload
         state.loading = false
     }
 }
 
 export const actions = {
-    getCategories(context, state) {
+    getAdvantages(context, state) {
         context.commit('loadingActivate')
         context.commit('errorsReset')
-        this.$axios.$get('/api/categories')
+        this.$axios.$get('/api/advantages')
         .then((response) => {
-            context.commit('updateCategories', response.categories)
+            context.commit('updateAdvantages', response.advantages)
         })
         .catch((error) => {
             context.commit('failed', error)
             context.commit('loadingDeactivate')
         })
     },
-    newCategory(context, formData) {
+    newAdvantage(context, formData) {
         let app = this
         context.commit('loadingActivate')
         context.commit('errorsReset')
         app.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
-        app.$axios.$post('/api/categories/new', formData)
+        app.$axios.$post('/api/advantages/new', formData)
         .then(response => {
-            app.$router.push('/dashboard/categories')
+            app.$router.push('/dashboard/advantages')
         })
         .catch((error) => {
             context.commit('failed', error)
             context.commit('loadingDeactivate')
         })
     },
-    updateCategory(context, [formData, id]) {
+    updateAdvantage(context, [formData, id]) {
         let app = this
         context.commit('loadingActivate')
         context.commit('errorsReset')
         app.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
-        app.$axios.$post('/api/categories/update/' + id, formData)
+        app.$axios.$post('/api/advantages/update/' + id, formData)
         .then(response => {
-            app.$router.push('/dashboard/categories')
+            app.$router.push('/dashboard/advantages')
         })
         .catch((error) => {
             context.commit('failed', error)
             context.commit('loadingDeactivate')
         })
     },
-    removeCategory(context, id) {
+    removeAdvantage(context, id) {
         let app = this
         context.commit('loadingActivate')
         context.commit('errorsReset')
         app.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
-        this.$axios.$post('/api/categories/remove/' + id)
+        this.$axios.$post('/api/advantages/remove/' + id)
         .then(response => {
-            context.dispatch('getCategories')
+            context.dispatch('getAdvantages')
         })
         .catch((error) => {
             context.commit('failed', error)

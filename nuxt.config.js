@@ -21,6 +21,8 @@ module.exports = {
         icons: {
           iconfont: 'mdi', 
         },
+        customVariables: ['@/assets/variables.scss'],
+       // treeShake: true 
       }]
     ],
    

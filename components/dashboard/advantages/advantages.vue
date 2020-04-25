@@ -2,18 +2,17 @@
   <div> 
     <v-card :elevation="2">
       <v-card-text>
-        <v-btn 
-          :to="`/dashboard/items/new`"
-          fab           
+        <v-btn
+          :to="`/dashboard/advantages/new`" 
+          fab
           small
           icon 
           color="teal"
-        >
-          <v-icon>mdi-plus</v-icon>
+        ><v-icon dark>mdi-plus</v-icon>
         </v-btn>    
 
-        <template v-if="!items.length" > 
-          <template v-if="$store.state.item.loading"> 
+        <template v-if="!advantages.length" > 
+          <template v-if="$store.state.advantage.loading"> 
             <v-row  v-for="n in 3" :key="n" >
               <v-col>
                 <v-skeleton-loader
@@ -26,75 +25,54 @@
           <template v-else>
             <v-row>
               <v-col class="text-center">
-                Пока записей нет
+                Empty
               </v-col>
             </v-row>
           </template>      
         </template>
-        <template v-else>
+        <template v-else> 
           <v-simple-table>
             <template v-slot:default>
               <thead>
                 <tr>
-                  <th class="text-center">Название</th>
-                  <th class="text-center">Описание</th>
-                  <th class="text-center">Цена</th>
-                  <th class="text-center">Категории</th>
+                  <th class="text-center">Текст</th>
+                  <th class="text-center">Значек</th>
                   <th class="text-center">Действия</th>
                 </tr>
               </thead>
-              <tbody>       
-                <tr v-for="(item, index) in items" :key="item.id">
+              <tbody>
+                <tr v-for="(advantage, index) in advantages" :key="advantage.id">
                   <td>
                     <span
-                    class="d-inline-block text-truncate"
-                    style="max-width: 50px;"
+                      class="d-inline-block text-truncate"
+                      style="max-width: 120px;"
                     >
-                      {{ item.title }}
-                    </span>
-                  </td>
-                  <td>
-                    <span
-                    class="d-inline-block text-truncate"
-                    style="max-width: 50px;"
-                    >
-                      {{ item.description }}
-                    </span>
-                  </td>
-                  <td>
-                    <span
-                    class="d-inline-block text-truncate"
-                    style="max-width: 50px;"
-                    >
-                      {{ item.cost }}
-                    </span>
-                  </td>
-                  <td>
-                    <v-chip
-                      v-for="category in item.categories" :key="category.id"
-                      class="ma-2"
-                      color="teal"
-                      text-color="white"
-                    >
-                        {{ category.title }}
-                    </v-chip>
+                    {{ advantage.description }}
+                  </span>
+                   <td>
+                    <v-icon v-if="advantage.icon">
+                    mdi-{{ advantage.icon }}
+                    </v-icon>
+                    <v-icon v-else>
                     
+                    </v-icon>
                   </td>
                   <td class="text-center">
-                      <v-btn  @click="remove(item.id, index)" 
+                      <v-btn  
+                        @click="remove(advantage.id, index)" 
+                        :disabled="loadings[index] && $store.state.advantage.loading"
                         fab
                         small
                         icon
                         color="error"
-                        :disabled="loadings[index] && $store.state.item.loading"
-                        :loading="loadings[index] && $store.state.item.loading"
+                        :loading="loadings[index] && $store.state.advantage.loading"
                       >
                         <v-icon dark>mdi-delete-outline</v-icon>
                       </v-btn>
 
                       <v-btn 
-                        :to="`/dashboard/items/${item.id}`"
-                        :disabled="loadings[index] && $store.state.item.loading"
+                        :to="`/dashboard/advantages/${advantage.id}`"
+                        :disabled="loadings[index] && $store.state.advantage.loading"
                         fab
                         small
                         icon
@@ -107,7 +85,7 @@
               </tbody>
             </template>
           </v-simple-table>
-        </template>
+        </template>       
       </v-card-text>
     </v-card>
     <serverSideErrors :errors="errorsFromServer"/>
@@ -117,7 +95,7 @@
 <script>
 import serverSideErrors from '~/components/serverSideErrors.vue'
 export default {
-    name: 'items',
+    name: 'advantages',
     components: {
       serverSideErrors
     },
@@ -127,15 +105,15 @@ export default {
         };
     },
     mounted() {
-      this.$store.dispatch('item/getItems')
+      this.$store.dispatch('advantage/getAdvantages')
     },
     computed: {
-        items() {
-          return this.$store.state.item.items
+        advantages() {
+          return this.$store.state.advantage.advantages
         },
         loadings() {
           let loadings = {}
-          for (let i = 0; i < this.items.length; i++) { 
+          for (let i = 0; i < this.advantages.length; i++) { 
             if (this.currentRemoving == i) {
               loadings[i] = true
             } else {
@@ -145,13 +123,13 @@ export default {
           return loadings
         },
         errorsFromServer: function () {
-            return this.$store.state.item.errors
+          return this.$store.state.advantage.errors
         }
     },
     methods: {
         remove(id, index) {
             this.currentRemoving = index
-            this.$store.dispatch('item/removeItem', id)
+            this.$store.dispatch('advantage/removeAdvantage', id)
         }
     }
 }

@@ -20,7 +20,7 @@
               dark
               flat
             >
-              <v-toolbar-title>Вход</v-toolbar-title>
+              <v-toolbar-title>Вход</v-toolbar-title>              
             </v-toolbar>
             <v-form 
               @submit.prevent="authenticate()" 
@@ -36,6 +36,7 @@
                   v-model="form.email"
                   :rules="emailRules"
                   required
+                  color="teal"
                   :disabled="$store.state.auth.loading"
                 ></v-text-field>
 
@@ -48,11 +49,19 @@
                   v-model="form.password"
                   :rules="passwordRules"
                   required
+                  color="teal"
                   :disabled="$store.state.auth.loading"
                 ></v-text-field>
               </v-card-text>
 
-             <v-card-actions>                  
+             <v-card-actions>  
+
+               <v-btn icon color="teal" :to="{path:'/'}">
+                <v-icon>
+                  mdi-arrow-left
+                </v-icon>
+               </v-btn>   
+                             
                   <div class="flex-grow-1"></div>
                   <v-btn 
                     color="teal"
@@ -60,6 +69,8 @@
                     value="Login"
                    :disabled="$store.state.auth.loading"
                   >Enter</v-btn>
+
+
               </v-card-actions>
 
               <v-progress-linear

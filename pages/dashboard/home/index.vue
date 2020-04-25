@@ -1,17 +1,15 @@
 <template>
-  <div>
-  <h1>Добро пожаловать</h1>
-  <v-img src="/elp.png"></v-img>
-
-  </div>
+  <home/>
 </template>
 
 <script>
+import home from '~/components/dashboard/home.vue'
+
 export default {
   layout: 'dashboard',
   middleware: 'authenticated',
   components: {
-    
+    home
   }
 }
 </script>

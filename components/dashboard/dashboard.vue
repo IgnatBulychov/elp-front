@@ -51,11 +51,10 @@
         >
         <v-icon>mdi-menu</v-icon>
       </v-btn>
-
-    <div class="flex-grow-1">
-    </div>
-    <v-toolbar-items>
-    </v-toolbar-items>
+      <div class="flex-grow-1">
+      </div>
+      <v-toolbar-items>
+      </v-toolbar-items>
     </v-app-bar>
     <v-content>
       <v-container fluid>

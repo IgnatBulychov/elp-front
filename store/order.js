@@ -1,18 +1,15 @@
 export const state = () => ({   
     loading: false, 
-    categories: [],
+    orders: [],
+    success: {
+        status: false,
+        messages: ''
+    },
     errors: {
         status: false,
         messages: []
     }
 })
-
-export const getters = {
-    getCategory: (state) => (id) => {
-        let category = state.categories.find(category => category.id == id)
-        return category
-    },
-}
 
 export const mutations = {
     loadingActivate(state) {
@@ -56,61 +53,51 @@ export const mutations = {
         state.errors.status = false
         state.errors.messages = []
     },
-    updateCategories(state, payload) {
-        state.categories = payload
+    updateOrders(state, payload) {
+        state.orders = payload
+        state.loading = false
+    },
+    orederCreated(state) {
+        state.success.status = true
+        state.success.message = 'Ваша зявка успешно отправлена. Мы свяжемся с Вами в ближайшее время!'
         state.loading = false
     }
 }
 
 export const actions = {
-    getCategories(context, state) {
+    getOrders(context, state) {
         context.commit('loadingActivate')
         context.commit('errorsReset')
-        this.$axios.$get('/api/categories')
+        this.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
+        this.$axios.$get('/api/orders')
         .then((response) => {
-            context.commit('updateCategories', response.categories)
+            context.commit('updateOrders', response.orders)
         })
         .catch((error) => {
             context.commit('failed', error)
             context.commit('loadingDeactivate')
         })
     },
-    newCategory(context, formData) {
+    newOrder(context, formData) {
         let app = this
         context.commit('loadingActivate')
         context.commit('errorsReset')
-        app.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
-        app.$axios.$post('/api/categories/new', formData)
+        app.$axios.$post('/api/orders/new', formData)
         .then(response => {
-            app.$router.push('/dashboard/categories')
+            context.commit('orederCreated')
         })
         .catch((error) => {
             context.commit('failed', error)
             context.commit('loadingDeactivate')
         })
     },
-    updateCategory(context, [formData, id]) {
-        let app = this
+    removeOrder(context, id) {
         context.commit('loadingActivate')
         context.commit('errorsReset')
-        app.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
-        app.$axios.$post('/api/categories/update/' + id, formData)
+        this.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
+        this.$axios.$post('/api/orders/remove/' + id)
         .then(response => {
-            app.$router.push('/dashboard/categories')
-        })
-        .catch((error) => {
-            context.commit('failed', error)
-            context.commit('loadingDeactivate')
-        })
-    },
-    removeCategory(context, id) {
-        let app = this
-        context.commit('loadingActivate')
-        context.commit('errorsReset')
-        app.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
-        this.$axios.$post('/api/categories/remove/' + id)
-        .then(response => {
-            context.dispatch('getCategories')
+            context.dispatch('getOrders')
         })
         .catch((error) => {
             context.commit('failed', error)

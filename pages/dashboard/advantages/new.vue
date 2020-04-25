@@ -1,15 +1,16 @@
 <template>
-  <categories/>
+  <newAdvantage/>
 </template>
 
 <script>
-import categories from '~/components/dashboard/categories/categories.vue'
+import newAdvantage from '~/components/dashboard/advantages/new.vue'
 
 export default {
   layout: 'dashboard',
   middleware: 'authenticated',
   components: {
-    categories
+    newAdvantage
   }
+  
 }
 </script>

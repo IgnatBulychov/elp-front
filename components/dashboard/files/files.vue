@@ -60,7 +60,7 @@
             </v-row>
           </template>
           <template v-else>
-            <div  class="text-center">
+            <div  class="text-center my-2">
               Пока файлов нет
             </div>
           </template>      

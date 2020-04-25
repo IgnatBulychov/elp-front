@@ -1,5 +1,27 @@
 <template>
     <v-list flat>
+
+<v-list-item-group color="teal">
+        
+        <v-list-item :to="{path:'/dashboard/home'}">
+          <v-list-item-icon>
+            <v-icon>mdi-alpha-e-circle</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Главная</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item :to="{path:'/dashboard/advantages'}">
+          <v-list-item-icon>
+            <v-icon>mdi-check-outline</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Преимущества</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+
       <v-list-group
         prepend-icon="mdi-package-variant"
         color="teal"
@@ -32,8 +54,6 @@
 
 
 
-<v-list-item-group color="teal">
-        
 
          <v-list-item :to="{path:'/dashboard/works'}">
           <v-list-item-icon>

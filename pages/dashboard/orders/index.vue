@@ -1,15 +1,16 @@
 <template>
-  <categories/>
+  <orders/>
 </template>
 
 <script>
-import categories from '~/components/dashboard/categories/categories.vue'
+import orders from '~/components/dashboard/orders/orders.vue'
 
 export default {
   layout: 'dashboard',
   middleware: 'authenticated',
   components: {
-    categories
+    orders
   }
+  
 }
 </script>

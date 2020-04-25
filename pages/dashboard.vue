@@ -11,6 +11,5 @@ export default {
   components: {
     dashboard
   }
-  
 }
 </script>

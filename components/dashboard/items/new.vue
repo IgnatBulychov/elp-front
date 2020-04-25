@@ -45,7 +45,6 @@
             label="Цена"
           ></v-text-field>
 
-
           <v-btn
             @click="$router.push('/dashboard/items')"  
             color="secondary"

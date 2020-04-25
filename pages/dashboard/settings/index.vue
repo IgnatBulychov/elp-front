@@ -1,15 +1,15 @@
 <template>
-  <categories/>
+  <settings/>
 </template>
 
 <script>
-import categories from '~/components/dashboard/categories/categories.vue'
+import settings from '~/components/dashboard/settings.vue'
 
 export default {
   layout: 'dashboard',
   middleware: 'authenticated',
   components: {
-    categories
+    settings
   }
 }
 </script>
