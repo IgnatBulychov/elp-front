@@ -11,7 +11,7 @@
             :rules="descriptionRules"
             required
             :disabled="$store.state.advantage.loading"
-            label="Описание"
+            :label="$t('text')"
           ></v-text-field>
 
            <v-text-field
@@ -19,24 +19,24 @@
             :rules="iconRules"
             required
             :disabled="$store.state.advantage.loading"
-            label="Значек"
+            :label="$t('icon')"
           ></v-text-field>
 
-          <span class="my-2">
-            See <a href="https://materialdesignicons.com/">materialdesignicons.com</a> 
-          </span><br> 
+          <div class="mb-1">
+            <a href="https://materialdesignicons.com/">materialdesignicons.com</a> 
+          </div><br> 
           
           <v-btn
-            @click="$router.push('/dashboard/advantages')"  
+            @click="$router.push(localePath('/dashboard/advantages'))"  
             color="secondary"
             :disabled="$store.state.advantage.loading"
-          >Отмена</v-btn>
+          >{{ $t('cancel') }}</v-btn>
 
           <v-btn
             type="submit"
             color="teal"
             :disabled="$store.state.advantage.loading"
-          >Добавить</v-btn>
+          >{{ $t('add') }}</v-btn>
 
         </v-form>
       </v-card-text>
@@ -59,12 +59,12 @@ export default {
               icon: ''
           },
           descriptionRules: [
-            v => !!v || 'Описание - обязательное поле',
-            v => (v && v.length <= 256) || 'Описание слишком длинное',
+            v => !!v || this.$t('text-req'),
+            v => (v && v.length <= 256) || this.$t('text-max'),
           ],
           iconRules: [
-            v => !!v || 'Значек - обязательное поле',
-            v => (v && v.length <= 256) || 'Поле "значек" слишком длинное',
+            v => !!v || this.$t('icon-req'),
+            v => (v && v.length <= 20) || this.$t('icon-max'),
           ]
       }
   },

@@ -3,7 +3,7 @@
     <v-card :elevation="2">
       <v-card-text>
         <v-btn
-          :to="`/dashboard/categories/new`" 
+          :to="localePath('/dashboard/categories/new')"
           fab
           small
           icon 
@@ -25,7 +25,7 @@
           <template v-else>
             <v-row>
               <v-col class="text-center">
-                Пока категорий нет
+                {{ $t('no-records') }}
               </v-col>
             </v-row>
           </template>      
@@ -35,8 +35,8 @@
             <template v-slot:default>
               <thead>
                 <tr>
-                  <th class="text-center">Название</th>
-                  <th class="text-center">Действия</th>
+                  <th class="text-center">{{ $t('title') }}</th>
+                  <th class="text-center">{{ $t('actions') }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -63,7 +63,7 @@
                       </v-btn>
 
                       <v-btn 
-                        :to="`/dashboard/categories/${category.id}`"
+                        :to="localePath('/dashboard/categories/' + category.id)"
                         :disabled="loadings[index] && $store.state.category.loading"
                         fab
                         small

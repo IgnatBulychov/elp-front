@@ -3,7 +3,7 @@
     <v-card :elevation="2">
       <v-card-text>
         <v-btn
-          :to="`/dashboard/reviews/new`" 
+          :to="localePath('/dashboard/reviews/new')"
           fab
           small
           icon 
@@ -24,7 +24,7 @@
           <template v-else>
             <v-row>
               <v-col class="text-center">
-                Пока отзывов нет
+                {{ $t('no-records') }}
               </v-col>
             </v-row>
           </template>      
@@ -34,10 +34,10 @@
             <template v-slot:default>
               <thead>
                 <tr>
-                  <th class="text-center">Имя</th>
-                  <th class="text-center">Отзыв</th>
-                  <th class="text-center">Фото</th>
-                  <th class="text-center">Действия</th>
+                  <th class="text-center">{{ $t('name') }}</th>
+                  <th class="text-center">{{ $t('review') }}</th>
+                  <th class="text-center">{{ $t('images') }}</th>
+                  <th class="text-center">{{ $t('actions') }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -76,7 +76,7 @@
                     </div>
                     <span v-else  class="d-inline-block text-truncate"
                       style="max-width: 120px;">
-                      Фото нет
+                      {{ $t('no-images') }}
                     </span>
                   </td>
                   <td class="text-center">
@@ -93,7 +93,7 @@
                       </v-btn>
 
                       <v-btn 
-                        :to="`/dashboard/reviews/${review.id}`"
+                        :to="localePath('/dashboard/reviews/' + review.id)"
                         :disabled="loadings[index] && $store.state.review.loading"
                         fab
                         small

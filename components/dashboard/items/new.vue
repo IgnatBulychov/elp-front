@@ -9,8 +9,8 @@
           <v-select
             v-model="selectedCategories"
             :items="categories"
-            no-data-text="Категории не найдены"
-            label="Категории"
+            :no-data-text="$t('no-records')"
+            :label="$t('categories')"
             multiple
             chips
             persistent-hint
@@ -21,7 +21,7 @@
             :rules="titleRules"
             required
             :disabled="$store.state.item.loading"
-            label="Название записи"
+            :label="$t('title')"
           ></v-text-field>
 
           <v-textarea
@@ -32,7 +32,7 @@
           >
             <template v-slot:label>
               <div>
-                Описание записи
+                {{ $t('description') }}
               </div>
             </template>
           </v-textarea>
@@ -42,22 +42,22 @@
             :rules="costRules"
             required
             :disabled="$store.state.item.loading"
-            label="Цена"
+            :label="$t('cost')"
           ></v-text-field>
 
           <v-btn
-            @click="$router.push('/dashboard/items')"  
+            @click="$router.push(localePath('/dashboard/items'))"  
             color="secondary"
             :disabled="$store.state.item.loading"
             class="mr-4"
-          >Отмена</v-btn>
+          >{{ $t('cancel') }}</v-btn>
 
           <v-btn
             type="submit"
             color="teal"
             class="mr-4"
             :disabled="$store.state.item.loading"
-          >Добавить</v-btn>
+          >{{ $t('add') }}</v-btn>
         </v-form>
       </v-card-text>
     </v-card>
@@ -81,16 +81,16 @@ export default {
           },
           selectedCategories: null,
           titleRules: [
-            v => !!v || 'Название - обязательное поле',
-            v => (v && v.length <= 256) || 'Название слишком длинное',
+            v => !!v || this.$t('title-req'),
+            v => (v && v.length <= 256) || this.$t('title-max'),
           ],
           descriptionRules: [
-            v => !!v || 'Описание - обязательное поле',
-            v => (v && v.length <= 2048) || 'Описание слишком длинное',
+            v => !!v || this.$t('desc-req'),
+            v => (v && v.length <= 2048) || this.$t('desc-max'),
           ],
           costRules: [
-            v => !!v || 'Цена - обязательное поле',
-            v => (v && v.length <= 25) || 'Кажеться цена слишком большая',
+            v => !!v || this.$t('cost-req'),
+            v => (v && v.length <= 25) || this.$t('cost-max'),
           ]
       }
   },

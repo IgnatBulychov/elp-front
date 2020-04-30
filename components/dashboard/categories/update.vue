@@ -11,20 +11,20 @@
             :rules="titleRules"
             required
             :disabled="$store.state.category.loading"
-            label="Название категории"
+            :label="$t('title')"
           ></v-text-field>
 
           <v-btn
-            @click="$router.push('/dashboard/categories')"  
+            @click="$router.push(localePath('/dashboard/categories'))"  
             color="secondary"
             :disabled="$store.state.category.loading"
-          >Отмена</v-btn>
+          >{{ $t('cancel') }}</v-btn>
 
           <v-btn
             type="submit"
             color="teal"
             :disabled="$store.state.category.loading"
-          >Изменить</v-btn>
+          >{{ $t('update') }}</v-btn>
 
         </v-form>
       </v-card-text>
@@ -46,8 +46,8 @@ export default {
               title: ''
           },
           titleRules: [
-            v => !!v || 'Название - обязательное поле',
-            v => (v && v.length <= 256) || 'Название слишком длинное',
+            v => !!v || this.$t('title-req'),
+            v => (v && v.length <= 256) || this.$t('title-req')
           ]
       }
   },

@@ -20,17 +20,20 @@
               dark
               flat
             >
-              <v-toolbar-title>Вход</v-toolbar-title>              
+              <v-toolbar-title>{{ $t('signin') }}</v-toolbar-title>   
+              <v-spacer></v-spacer>
+              <v-btn text small v-if="$i18n.locale != 'en'" :to="switchLocalePath('en')">English</v-btn>  
+              <v-btn text small v-if="$i18n.locale != 'ru'" :to="switchLocalePath('ru')">Русский</v-btn>  
+              <v-btn text small v-if="$i18n.locale != 'fi'" :to="switchLocalePath('fi')">Suomen</v-btn>      
             </v-toolbar>
-            <v-form 
+            <v-form
               @submit.prevent="authenticate()" 
               ref="form"    
               lazy-validation
             >
               <v-card-text>
                 <v-text-field
-                  label="E-mail"
-                  name="login"
+                  :label="$t('email')"
                   prepend-icon="mdi-account"
                   type="email"
                   v-model="form.email"
@@ -42,8 +45,7 @@
 
                 <v-text-field
                   id="password"
-                  label="Пароль"
-                  name="password"
+                  :label="$t('password')"
                   prepend-icon="mdi-lock"
                   type="password"
                   v-model="form.password"
@@ -56,7 +58,7 @@
 
              <v-card-actions>  
 
-               <v-btn icon color="teal" :to="{path:'/'}">
+               <v-btn icon color="teal" :to="localePath('/')">
                 <v-icon>
                   mdi-arrow-left
                 </v-icon>
@@ -66,9 +68,8 @@
                   <v-btn 
                     color="teal"
                     type="submit"
-                    value="Login"
                    :disabled="$store.state.auth.loading"
-                  >Enter</v-btn>
+                  >{{ $t('signin') }}</v-btn>
 
 
               </v-card-actions>
@@ -125,6 +126,9 @@
       errorsFromServer: function () {
           return this.$store.state.auth.errors
       }
+    },
+    created() {
+      console.log(this.$i18n.locale)
     },
     methods: {
       authenticate() {

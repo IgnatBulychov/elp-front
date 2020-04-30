@@ -16,7 +16,7 @@
           <template v-else>
             <v-row>
               <v-col class="text-center">
-                Пока заявок нет
+                {{ $t('no-records') }}
               </v-col>
             </v-row>
           </template>      
@@ -26,11 +26,11 @@
             <template v-slot:default>
               <thead>
                 <tr>
-                  <th class="text-center">Имя</th>
-                  <th class="text-center">Контакты</th>
-                  <th class="text-center">Заявка</th>
-                  <th class="text-center">Дата</th>
-                  <th class="text-center">Удалить</th>
+                  <th class="text-center">{{ $t('name') }}</th>
+                  <th class="text-center">{{ $t('contacts') }}</th>
+                  <th class="text-center">{{ $t('order') }}</th>
+                  <th class="text-center">{{ $t('date') }}</th>
+                  <th class="text-center">{{ $t('remove') }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -39,8 +39,8 @@
                       {{ order.name }}
                   </td>
                   <td>
-                      Телефон: {{ order.phone }} <br>
-                      E-mail: {{ order.email }} <br>
+                      {{ $t('phone') }}: {{ order.phone }} <br>
+                      {{ $t('email') }}: {{ order.email }} <br>
                   </td>
                   <td>
                       {{ order.description }}

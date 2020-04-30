@@ -151,11 +151,12 @@
     </v-navigation-drawer>
 
     <v-content>
-      <v-container fluid>       
+      <v-container fluid>      
         
         <v-parallax
-          dark
-          src="main.jpg"
+          dark          
+          v-if="landingData.settings.file" 
+          :src='$axios.defaults.baseURL + landingData.settings.file.src.replace("public","/storage")'
           min-height="100%"
         >
           <v-row
@@ -163,7 +164,7 @@
           >
             <v-col class="text-center" cols="12" md="6">
               <h1 class="display-2 font-weight-thin mb-4">{{ landingData.settings.title }}</h1>
-              <h4 class="subheading">{{ landingData.settings.description }}</h4>
+              <h4 class="subheading">{{ landingData.settings.subtitle }}</h4>
               <v-btn 
                 color="white"
                 @click="$vuetify.goTo('#about', { offset: +50,  easing: 'easeInOutCubic' })"
@@ -177,7 +178,7 @@
               >make order</v-btn>
             </v-col>
           </v-row>
-        </v-parallax>
+        </v-parallax>     
 
         <v-row justify="center" id="about">
           <v-col cols="10" md="8">
@@ -215,9 +216,9 @@
                       <template v-slot:default>
                         <thead>
                           <tr>
-                            <th class="text-left">Услуга</th>
-                            <th class="text-left">Описание</th>
-                            <th class="text-left">Цена</th>
+                            <th class="text-left">Service</th>
+                            <th class="text-left">Description</th>
+                            <th class="text-left">Cost</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -471,11 +472,11 @@
           </v-row>
         </v-container>
       </v-content>    
-      <v-footer >
+      <v-footer>
         <v-row>
           <v-col cols="12"  class="text-center">
-            {{ new Date().getFullYear() }} — <strong>Vuetify</strong> <br>
-            <router-link color="cyan" :to="{path:'/login'}">Log in</router-link> | <router-link :to="{path:'/dashboard/home'}">Dashboard</router-link>
+            {{ new Date().getFullYear() }} — <strong>{{ landingData.settings.title }}</strong> <br> 
+            <router-link color="cyan" :to="localePath('/login')">Log in</router-link> | <router-link :to="localePath('/dashboard/home')">Dashboard</router-link>
           </v-col>
         </v-row>
       </v-footer>
@@ -519,6 +520,11 @@ export default {
         overlay: false,
         dialogsTemp: []
       }
+  },
+  head () {
+    return {
+      title: this.landingData.settings.title,      
+    }
   },
   computed: {
     dialogs() {

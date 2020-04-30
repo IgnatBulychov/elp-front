@@ -24,7 +24,7 @@
                     accept="image/png, image/jpeg, image/bmp"
                     show-size
                     color="teal"
-                    label="Изображения"
+                    :label="$t('images')"
                     prepend-icon="mdi-camera"
                     multiple
                     chips
@@ -37,7 +37,7 @@
                     :disabled="$store.state.file.loading"
                     type="submit"
                     color="teal"
-                  >Добавить</v-btn>
+                  >{{ $t('add') }}</v-btn>
                 </v-col>
               </v-row>
             </v-card-text>
@@ -61,7 +61,7 @@
           </template>
           <template v-else>
             <div  class="text-center my-2">
-              Пока файлов нет
+              {{ $t('no-files') }}
             </div>
           </template>      
         </template>
@@ -205,16 +205,16 @@ export default {
 
       if (this.newFiles.length == 0) {
         this.errors.status = true
-        this.errors.message = 'Вы не добавили фото'
+        this.errors.message = this.$t('imgs-req')
       } else if (this.newFiles.length > 15) {
         this.errors.status = true
-        this.errors.message = 'Количество фотографий должно быть менее 15'
+        this.errors.message = this.$t('imgs-qua')
       } else if (max > 3000000) {
         this.errors.status = true
-        this.errors.message = 'Изображения должны быть не более 3 Мб'
+        this.errors.message = this.$t('imgs-size')
       } else if (errorsOfFormat > 0) {
         this.errors.status = true
-        this.errors.message = 'Изображения должны быть в формате JPEG, PNG, BMP, GIF или SVG'
+        this.errors.message = this.$t('imgs-form')
       } else { 
         this.validateImagesReset() 
       }

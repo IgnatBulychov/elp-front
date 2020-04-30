@@ -3,7 +3,7 @@
     <v-card :elevation="2">
       <v-card-text>
         <v-btn
-          :to="`/dashboard/works/new`" 
+          :to="localePath('/dashboard/works/new')"
           fab
           small
           icon 
@@ -24,7 +24,7 @@
           <template v-else>
             <v-row>
               <v-col class="text-center">
-                Пока записей в портфолио нет
+                {{ $t('no-records') }}
               </v-col>
             </v-row>
           </template>      
@@ -34,10 +34,10 @@
             <template v-slot:default>
               <thead>
                 <tr>
-                  <th class="text-center">Название</th>
-                  <th class="text-center">Описание</th>
-                  <th class="text-center">Количество файлов</th>
-                  <th class="text-center">Действия</th>
+                  <th class="text-center">{{ $t('title') }}</th>
+                  <th class="text-center">{{ $t('description') }}</th>
+                  <th class="text-center">{{ $t('images') }}</th>
+                  <th class="text-center">{{ $t('actions') }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -67,7 +67,7 @@
                       {{ work.files.length }}
                     </span>
                     <span v-else>
-                      Файлов нет
+                      {{ $t('no-images') }}
                     </span>
                   </td>
                   <td class="text-center">
@@ -84,7 +84,7 @@
                       </v-btn>
 
                       <v-btn 
-                        :to="`/dashboard/works/${work.id}`"
+                        :to="localePath('/dashboard/works/' + work.id)"
                         :disabled="loadings[index] && $store.state.work.loading"
                         fab
                         small

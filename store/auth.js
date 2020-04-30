@@ -46,11 +46,11 @@ export const actions = {
     login(context, credentials) {
         let app = this
         context.commit('loadingActivate')
-        this.$axios.$post('/api/auth/login', credentials) 
+        app.$axios.$post('/api/auth/login', credentials) 
         .then((response) => {
             Cookie.set('user', response) 
             context.commit('setAuth', response)
-            app.$router.push({path: '/dashboard'})
+            app.$router.push(app.app.localePath('/dashboard/home'))
         })
         .catch((error, response) => {
             console.log(error)
@@ -58,9 +58,10 @@ export const actions = {
         })       
     },
     logout(context) {
+        let app = this
         Cookie.remove('user')
         context.commit('setAuth', null)
-        this.$router.push('/login');
+        app.$router.push(app.app.localePath('/'))
     }
 }
 

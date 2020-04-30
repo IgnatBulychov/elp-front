@@ -3,7 +3,7 @@
     <v-card :elevation="2">
       <v-card-text>
         <v-btn
-          :to="`/dashboard/advantages/new`" 
+          :to="localePath('/dashboard/advantages/new')"
           fab
           small
           icon 
@@ -25,7 +25,7 @@
           <template v-else>
             <v-row>
               <v-col class="text-center">
-                Empty
+                {{ $t('no-records') }}
               </v-col>
             </v-row>
           </template>      
@@ -35,9 +35,9 @@
             <template v-slot:default>
               <thead>
                 <tr>
-                  <th class="text-center">Текст</th>
-                  <th class="text-center">Значек</th>
-                  <th class="text-center">Действия</th>
+                  <th class="text-center">{{ $t('text') }}</th>
+                  <th class="text-center">{{ $t('icon') }}</th>
+                  <th class="text-center">{{ $t('actions') }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -71,7 +71,7 @@
                       </v-btn>
 
                       <v-btn 
-                        :to="`/dashboard/advantages/${advantage.id}`"
+                        :to="localePath('/dashboard/advantages/' + advantage.id)"
                         :disabled="loadings[index] && $store.state.advantage.loading"
                         fab
                         small

@@ -11,7 +11,7 @@
             :rules="nameRules"
             required
             :disabled="$store.state.order.loading"
-            label="Ваше имя"
+            label="Name"
           ></v-text-field>
 
           <v-text-field
@@ -20,7 +20,7 @@
             :rules="phoneRules"
             required
             :disabled="$store.state.order.loading"
-            label="Ваш Телефон"
+            label="Phone number"
           ></v-text-field>
 
           <v-text-field
@@ -29,7 +29,7 @@
             :rules="emailRules"
             required
             :disabled="$store.state.order.loading"
-            label="Ваш Email"
+            label="E-mail"
           ></v-text-field>
 
           <v-textarea
@@ -41,7 +41,7 @@
           >
             <template v-slot:label>
               <div>
-                Комментарий
+                Comment
               </div>
             </template>
           </v-textarea>
@@ -50,7 +50,7 @@
               type="submit"
               color="cyan darken-2" outlined
               :disabled="$store.state.order.loading"
-            >Отправить</v-btn>
+            >Send</v-btn>
           </div>
         </v-form>    
     <v-snackbar
@@ -89,19 +89,26 @@ export default {
               description: ''
           },
           nameRules: [
-            v => !!v || 'Введите ваше имя',
-            v => (v && v.length <= 128) || 'Имя слишком длинное',
+            v => !!v || 'Name is a required field',
+            v => (v && v.length <= 128) || 'Name field is very large'
           ],
           phoneRules: [
-            v => (v && v.length <= 25) || 'Номер слишком длинный',
+            v => (v.length <= 25) || 'Phone number is very large'
           ],
           emailRules: [
-            v => (v && v.length <= 128) || 'E-mail слишком длинный',
-            v => /.+@.+\..+/.test(v) || 'Некорректный E-mail',
+            v => (v.length <= 128) || 'E-mail is very large',
+            v => {
+                if(v.length > 0) {
+                  const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                  return pattern.test(v) || 'Invalid email'
+                } else {
+                  return true
+                }
+            }
           ],
           descriptionRules: [
-            v => !!v || 'Введите комментарий',
-            v => (v && v.length <= 2048) || 'Комментарий слишком большой',
+            v => !!v || 'Comment is a required field',
+            v => (v && v.length <= 2048) || 'Comment is very large'
           ]         
       }
   },

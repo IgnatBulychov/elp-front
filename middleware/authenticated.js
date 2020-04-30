@@ -1,7 +1,7 @@
-export default function ({ store, redirect }) {
+export default function ({ store, redirect, app}) {
   // If the user is not authenticated
   if (!store.state.auth.user) {
-    return redirect('/login')
+    return redirect(app.localePath('/login'))
   }
 }
   

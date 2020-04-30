@@ -20,12 +20,13 @@ export const mutations = {
     },
     failed (state, error) {
         console.log(1)
+        let app = this
         state.errors.messages = []
         if (error.response) {
             switch (error.response.status) {
                 case 401:
                     state.errors.messages.push('Время сессии истекло')
-                    this.$router.push('/login')   
+                    app.$router.push(app.app.localePath('/login'))
                     break;
                 case 400:
                     console.log(400)
@@ -78,7 +79,7 @@ export const actions = {
         .then(response => {
             context.dispatch('getFiles')
             context.commit('loadingDeactivate')
-            app.$router.push('/dashboard/files')
+            app.$router.push(app.app.localePath('/dashboard/files'))
         })
         .catch((error) => {
             context.commit('failed', error)

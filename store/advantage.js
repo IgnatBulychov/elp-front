@@ -23,12 +23,13 @@ export const mutations = {
     },
     failed (state, error) {
         console.log(1)
+        let app = this
         state.errors.messages = []
         if (error.response) {
             switch (error.response.status) {
                 case 401:
                     state.errors.messages.push('Время сессии истекло')
-                    this.$router.push('/login')   
+                    app.$router.push(app.app.localePath('/login'))
                     break;
                 case 400:
                     console.log(400)
@@ -82,7 +83,7 @@ export const actions = {
         app.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
         app.$axios.$post('/api/advantages/new', formData)
         .then(response => {
-            app.$router.push('/dashboard/advantages')
+            app.$router.push(app.app.localePath('/dashboard/advantages'))
         })
         .catch((error) => {
             context.commit('failed', error)
@@ -96,7 +97,7 @@ export const actions = {
         app.$axios.setToken(context.rootState.auth.user.access_token, 'Bearer')
         app.$axios.$post('/api/advantages/update/' + id, formData)
         .then(response => {
-            app.$router.push('/dashboard/advantages')
+            app.$router.push(app.app.localePath('/dashboard/advantages'))
         })
         .catch((error) => {
             context.commit('failed', error)

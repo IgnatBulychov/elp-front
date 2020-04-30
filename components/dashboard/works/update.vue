@@ -11,7 +11,7 @@
             :rules="titleRules"
             required
             :disabled="$store.state.work.loading"
-            label="Название записи"
+            :label="$t('title')"
           ></v-text-field>
 
           <v-textarea
@@ -22,16 +22,16 @@
           >
             <template v-slot:label>
               <div>
-                Описание записи
+                {{ $t('description') }}
               </div>
             </template>
           </v-textarea>
 
-          <span color="secondary" class="body-1 my-2">Файлы:</span>         
+          <span color="secondary" class="body-1 my-2">{{ $t('images') }}</span>         
           <br>
           
           <v-btn  @click.stop="dialog = true" outlined class="my-2" color="teal" :disabled="$store.state.work.loading"> 
-            <v-icon class="mr-3">mdi-image-plus</v-icon> Добавить Файлы
+            <v-icon class="mr-3">mdi-image-plus</v-icon> {{ $t('add') }}
           </v-btn>
 
           <v-dialog v-model="dialog" scrollable max-width="90%">
@@ -62,18 +62,18 @@
           </v-row>
 
           <v-btn
-            @click="$router.push('/dashboard/works')"  
+            @click="$router.push(localePath('/dashboard/works'))"  
             class="my-2 mx-1"
             color="secondary"
             :disabled="$store.state.work.loading"
-          >Отмена</v-btn>
+          >{{ $t('cancel') }}</v-btn>
 
           <v-btn
             type="submit"
             color="teal"
             class="my-2 mx-1"
             :disabled="$store.state.work.loading"
-          >Изменить</v-btn>
+          >{{ $t('update') }}</v-btn>
 
         </v-form>
       </v-card-text>
@@ -100,12 +100,12 @@ export default {
           files: [],          
           dialog: false,
           titleRules: [
-            v => !!v || 'Название - обязательное поле',
-            v => (v && v.length <= 256) || 'Название слишком длинное',
+            v => !!v || this.$t('title-req'),
+            v => (v && v.length <= 256) || this.$t('title-max'),
           ],
           descriptionRules: [
-            v => !!v || 'Описание - обязательное поле',
-            v => (v && v.length <= 2048) || 'Описание слишком длинное',
+            v => !!v || this.$t('desc-req'),
+            v => (v && v.length <= 2048) || this.$t('desc-max'),
           ]
       }
   },

@@ -11,7 +11,7 @@
             :rules="nameRules"
             required
             :disabled="$store.state.review.loading"
-            label="Имя"
+            :label="$t('name')"
           ></v-text-field>
 
           <v-textarea
@@ -22,16 +22,16 @@
           >
             <template v-slot:label>
               <div>
-                Отзыв
+                {{ $t('review') }}
               </div>
             </template>
           </v-textarea>
 
-          <span color="secondary" class="body-1 my-2">Фото:</span>         
+          <span color="secondary" class="body-1 my-2">{{ $t('images') }}</span>         
           <br>
           
           <v-btn  @click.stop="dialog = true" outlined class="my-2" color="teal" :disabled="$store.state.review.loading"> 
-            <v-icon class="mr-3">mdi-image-plus</v-icon> Добавить фото
+            <v-icon class="mr-3">mdi-image-plus</v-icon> {{ $t('add') }}
           </v-btn>
 
           <v-dialog v-model="dialog" scrollable max-width="90%">
@@ -67,18 +67,18 @@
           </v-row>
 
           <v-btn
-            @click="$router.push('/dashboard/reviews')"  
+            @click="$router.push(localePath('/dashboard/reviews'))"  
             class="my-2 mr-1"
             color="secondary"
             :disabled="$store.state.review.loading"
-          >Отмена</v-btn>
+          >{{ $t('cancel') }}</v-btn>
 
           <v-btn
             type="submit"
             color="teal"
             class="my-2 mx-1"
             :disabled="$store.state.review.loading"
-          >Добавить</v-btn>
+          >{{ $t('add') }}</v-btn>
 
         </v-form>
       </v-card-text>
@@ -105,12 +105,12 @@ export default {
           files: [],
           dialog: false,
           nameRules: [
-            v => !!v || 'Имя - обязательное поле',
-            v => (v && v.length <= 128) || 'Имя слишком длинное',
+            v => !!v || this.$t('name-req'),
+            v => (v && v.length <= 128) || this.$t('name-max'),
           ],
           reviewRules: [
-            v => !!v || 'Отзыв - обязательное поле',
-            v => (v && v.length <= 2048) || 'Отзыв слишком длинный',
+            v => !!v || this.$t('review-req'),
+            v => (v && v.length <= 2048) || this.$t('review-max'),
           ]
       }
   },
