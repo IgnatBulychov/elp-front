@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 module.exports = {
 
     head: {
@@ -25,11 +27,11 @@ module.exports = {
        // treeShake: true 
       }]
     ],
-   
+
     axios: {
-      baseURL: 'http://elp-back.qq' ,  // set your URL of laravel API by ELP-backend 
+        baseURL: process.env.API_URL,
     },
-     
+
     modules: [
       [
         'nuxt-i18n',

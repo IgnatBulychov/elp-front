@@ -10,5 +10,8 @@ npm-debug.log
 # Nuxt generate
 dist
 
+#env
+.env
+
 # Для быстрого запуска командной строки для Windows
 elp-front.cmd
