@@ -37,7 +37,7 @@
             >
               <v-card>                        
                 <v-img
-                  :src='$axios.defaults.baseURL + file.src.replace("public","/storage")'
+                  :src='file.src'
                   class="white--text align-end"
                   height="160px"
                 ></v-img>

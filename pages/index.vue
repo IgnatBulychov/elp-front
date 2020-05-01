@@ -156,7 +156,7 @@
         <v-parallax
           dark          
           v-if="landingData.settings.file" 
-          :src='$axios.defaults.baseURL + landingData.settings.file.src.replace("public","/storage")'
+          :src='landingData.settings.file.src'
           min-height="100%"
         >
           <v-row
@@ -246,7 +246,7 @@
                   <v-card class="mx-auto" max-width="344">            
                     <div v-if="work.files.length">
                       <div v-for="(file, fileKey) in work.files" :key="file.id">
-                        <v-img v-if="fileKey == 0 && file.src" :src='$axios.defaults.baseURL + file.src.replace("public","/storage")' height="160px"></v-img>
+                        <v-img v-if="fileKey == 0 && file.src" :src='file.src' height="160px"></v-img>
                       </div>
                     </div>
                     <v-card-title>
@@ -307,7 +307,7 @@
                                 align="center"
                                 justify="center"
                               >
-                                  <v-img :src='$axios.defaults.baseURL + file.src.replace("public","/storage")'></v-img>
+                                  <v-img :src='file.src'></v-img>
                               </v-row>
                             </v-sheet>
                           </v-carousel-item>
@@ -365,7 +365,7 @@
                           class="mx-3"
                           v-for="(file, fileKey) in review.files" :key="file.id"
                         >
-                          <v-img :src='$axios.defaults.baseURL + file.src.replace("public","/storage")'></v-img>
+                          <v-img :src='file.src'></v-img>
                         </v-avatar>
                       </div>
                     </v-col>

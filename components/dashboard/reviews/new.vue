@@ -48,7 +48,7 @@
               lg="2"
             >
               <v-card>
-                <v-img :src='$axios.defaults.baseURL + file.src.replace("public","/storage")'></v-img>
+                <v-img :src='file.src'></v-img>
                <v-card-actions>
                   <v-spacer></v-spacer>             
                     <v-btn  @click="removeImage(key)" 

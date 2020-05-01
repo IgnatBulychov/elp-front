@@ -1,24 +1,24 @@
 <template>
 <v-app>
   <v-content>
-    <v-container
-      class="fill-height"
-      fluid
-    >
+    <v-container>
       <v-row
         align="center"
         justify="center"
+        class="py-5 my-5"
       >
         <v-col
+          class="py-5 my-5"
           cols="12"
+          xs="12"
           sm="8"
-          md="4"
+          md="6"  
+          lg="4"          
         >
-          <v-card class="elevation-12">
+          <v-card class="elevation-12 my-5">
             <v-toolbar
               color="teal"
               dark
-              flat
             >
               <v-toolbar-title>{{ $t('signin') }}</v-toolbar-title>   
               <v-spacer></v-spacer>

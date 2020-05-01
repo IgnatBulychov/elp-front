@@ -69,7 +69,7 @@
                       :key="file.id"
                     >
                       <v-img 
-                        :src='$axios.defaults.baseURL + file.src.replace("public","/storage")'
+                        :src='file.src'
                       >
                       </v-img>
                     </v-avatar>

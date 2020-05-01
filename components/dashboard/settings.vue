@@ -33,7 +33,7 @@
                <v-row>
                    <v-col cols="12" sm="6">
                         <v-card v-if="settings.file" >
-                            <v-img max-height="150px" :src='$axios.defaults.baseURL + settings.file.src.replace("public","/storage")'></v-img>
+                            <v-img max-height="150px" :src='settings.file'></v-img>
                         <v-card-actions>
                             <v-spacer></v-spacer>             
                                 <v-btn @click="removeImage()" 
