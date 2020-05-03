@@ -492,18 +492,14 @@ export default {
     newOrder
   },
   async asyncData({ $axios })  {
-    let dataAdvantages = await $axios.$get('/api/advantages')
-    let dataCategories = await $axios.$get('/api/categories')
-    let dataReviews = await $axios.$get('/api/reviews')
-    let dataWorks = await $axios.$get('/api/works')
-    let dataSettings = await $axios.$get('/api/settings')
+    let data = await $axios.$get('/api/landing')
     return { 
       landingData: {
-        categories: dataCategories.categories,
-        reviews: dataReviews.reviews,
-        works: dataWorks.works,
-        advantages: dataAdvantages.advantages,
-        settings: dataSettings.settings
+        categories: data.categories,
+        reviews: data.reviews,
+        works: data.works,
+        advantages: data.advantages,
+        settings: data.settings
       } 
     }
   },  
