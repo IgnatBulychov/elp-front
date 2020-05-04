@@ -1,72 +1,72 @@
 <template>
-   <v-app>
-    
+  <v-app>  
 
-  <v-navigation-drawer
-    app
-    v-model="drawer"
-    disable-resize-watcher 
-  >
-    <v-list
-      nav
-      dense
+    <v-navigation-drawer
+      app
+      v-model="drawer"
+      disable-resize-watcher 
     >
-      <v-list-item>
-          
-        <v-spacer></v-spacer>
+      <v-list
+        nav
+        dense
+      >
+        <v-list-item>
+            
+          <v-spacer></v-spacer>
 
           <v-btn icon large @click="drawer = !drawer">
             <v-icon>
               mdi-close
             </v-icon>
           </v-btn>
-      </v-list-item>     
+        </v-list-item>     
 
-      <v-list-item-group> 
+        <v-list-item-group> 
 
           <v-list-item>
             <v-list-item-content
               class="my-3" 
-              @click="$vuetify.goTo('#about', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
+              @click="$vuetify.goTo('#about', { offset: -20,  easing: 'easeInOutCubic' }); drawer = !drawer"
            >About</v-list-item-content>
-          </v-list-item>
-
-          <v-list-item v-if="landingData.works.length" >
-            <v-list-item-content              
-              class="my-3" 
-              @click="$vuetify.goTo('#works', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
-           >Portfolio</v-list-item-content>
           </v-list-item>
 
           <v-list-item v-if="landingData.categories.length" >
             <v-list-item-content              
               class="my-3" 
-              @click="$vuetify.goTo('#items', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
+              @click="$vuetify.goTo('#items', { offset: -20,  easing: 'easeInOutCubic' }); drawer = !drawer"
            >Our Service</v-list-item-content>
+          </v-list-item>
+
+          <v-list-item v-if="landingData.works.length" >
+            <v-list-item-content              
+              class="my-3" 
+              @click="$vuetify.goTo('#works', { offset: -20,  easing: 'easeInOutCubic' }); drawer = !drawer"
+           >Portfolio</v-list-item-content>
           </v-list-item>
 
           <v-list-item v-if="landingData.reviews.length" >
             <v-list-item-content
               class="my-3" 
-              @click="$vuetify.goTo('#reviews', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
+              @click="$vuetify.goTo('#reviews', { offset: -20,  easing: 'easeInOutCubic' }); drawer = !drawer"
            >Reviews</v-list-item-content>
           </v-list-item>   
 
           <v-list-item>
             <v-list-item-content
               class="my-3" 
-              @click="$vuetify.goTo('#contacts', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
+              @click="$vuetify.goTo('#contacts', { offset: -20,  easing: 'easeInOutCubic' }); drawer = !drawer"
            >Contacts</v-list-item-content>
           </v-list-item>
 
           <v-list-item>
             <v-list-item-content
               class="my-3" 
-              @click="$vuetify.goTo('#order', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
+              @click="$vuetify.goTo('#order', { offset: -20,  easing: 'easeInOutCubic' }); drawer = !drawer"
            >Make order</v-list-item-content>
           </v-list-item>
           
         </v-list-item-group>
+
       </v-list>
     </v-navigation-drawer>
 
@@ -88,7 +88,7 @@
         <v-btn 
           text 
           color="cyan darken-2" 
-          @click="$vuetify.goTo('#about', { offset: +50,  easing: 'easeInOutCubic' })"
+          @click="$vuetify.goTo('#about', { offset: -20,  easing: 'easeInOutCubic' })"
         >About</v-btn>
 
          <v-divider 
@@ -100,7 +100,7 @@
           text  
           color="cyan darken-2" 
           v-if="landingData.categories.length" 
-          @click="$vuetify.goTo('#items', { offset: +50,  easing: 'easeInOutCubic' })"
+          @click="$vuetify.goTo('#items', { offset: -20,  easing: 'easeInOutCubic' })"
         >Our servise</v-btn>
 
         <v-divider
@@ -113,7 +113,7 @@
           text  
           color="cyan darken-2" 
           v-if="landingData.works.length" 
-          @click="$vuetify.goTo('#works', { offset: +50,  easing: 'easeInOutCubic' })"
+          @click="$vuetify.goTo('#works', { offset: -20,  easing: 'easeInOutCubic' })"
         >Portfolio</v-btn>
 
         <v-divider 
@@ -126,7 +126,7 @@
           text  
           color="cyan darken-2" 
           v-if="landingData.reviews.length" 
-          @click="$vuetify.goTo('#reviews', { offset: +50,  easing: 'easeInOutCubic' })"
+          @click="$vuetify.goTo('#reviews', { offset: -20,  easing: 'easeInOutCubic' })"
         >Reviews</v-btn>
 
         <v-divider 
@@ -138,7 +138,7 @@
         <v-btn 
           text  
           color="cyan darken-2"  
-          @click="$vuetify.goTo('#contacts', { offset: +50,  easing: 'easeInOutCubic' })"
+          @click="$vuetify.goTo('#contacts', { offset: -20,  easing: 'easeInOutCubic' })"
         >Contacts</v-btn>
 
         <v-divider 
@@ -146,11 +146,11 @@
           vertical
         ></v-divider>
       
-    </v-toolbar-items>
+      </v-toolbar-items>
 
-    <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
 
-  </v-app-bar>
+    </v-app-bar>
 
     <v-content app>
 
@@ -168,14 +168,14 @@
               <h4 class="subheading">{{ landingData.settings.subtitle }}</h4>
               <v-btn 
                 color="white"
-                @click="$vuetify.goTo('#about', { offset: +50,  easing: 'easeInOutCubic' })"
+                @click="$vuetify.goTo('#about', { offset: -20,  easing: 'easeInOutCubic' })"
                 class="mx-3 my-4" 
                 outlined
               >more</v-btn> 
               <v-btn 
                 color="white"
                 class="mx-3 my-4"
-                @click="$vuetify.goTo('#order', { offset: +50,  easing: 'easeInOutCubic' })"
+                @click="$vuetify.goTo('#order', { offset: -20,  easing: 'easeInOutCubic' })"
               >make order</v-btn>
             </v-col>
           </v-row>
@@ -383,7 +383,7 @@
             id="order" 
           >
             <v-col cols="10" md="8">
-              <h3 class="display-1 font-weight-thin mb-5">Send order</h3> 
+              <h3 class="display-1 font-weight-thin my-5">Send order</h3> 
               <v-divider class="my-5"></v-divider>      
               <newOrder/>
             </v-col>
@@ -474,16 +474,16 @@
             </v-col>
           </v-row>
         </v-container>
-      </v-content>  
-      <v-footer>
-        <v-row>
-          <v-col cols="12"  class="text-center">
-            {{ new Date().getFullYear() }} — <strong>{{ landingData.settings.title }}</strong> <br> 
-            <router-link color="cyan" :to="localePath('/login')">Log in</router-link> | <router-link :to="localePath('/dashboard/home')">Dashboard</router-link>
-          </v-col>
-        </v-row>
-      </v-footer>       
- </v-app>
+    </v-content>  
+    <v-footer>
+      <v-row>
+        <v-col cols="12"  class="text-center">
+          {{ new Date().getFullYear() }} — <strong>{{ landingData.settings.title }}</strong> <br> 
+          <router-link color="cyan" :to="localePath('/login')">Log in</router-link> | <router-link :to="localePath('/dashboard/home')">Dashboard</router-link>
+        </v-col>
+      </v-row>
+    </v-footer>       
+  </v-app>
 </template>
 
 <script>
