@@ -60,7 +60,7 @@ export const mutations = {
     },
     orederCreated(state) {
         state.success.status = true
-        state.success.message = 'Ваша зявка успешно отправлена. Мы свяжемся с Вами в ближайшее время!'
+        state.success.message = 'Your application has been sent successfully. We will contact you shortly!'
         state.loading = false
     }
 }

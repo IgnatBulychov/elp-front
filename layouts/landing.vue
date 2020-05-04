@@ -1,7 +1,5 @@
 <template>
-  <v-app>
-    <Nuxt />
-  </v-app>
+  <Nuxt />
 </template>
 
 <style scoped>

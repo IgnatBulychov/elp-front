@@ -67,7 +67,7 @@
                       {{ work.files.length }}
                     </span>
                     <span v-else>
-                      {{ $t('no-images') }}
+                      {{ $t('no-files') }}
                     </span>
                   </td>
                   <td class="text-center">

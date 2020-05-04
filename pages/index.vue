@@ -1,6 +1,76 @@
 <template>
-  <div>
-    <v-app-bar fixed>
+   <v-app>
+    
+
+  <v-navigation-drawer
+    app
+    v-model="drawer"
+    disable-resize-watcher 
+  >
+    <v-list
+      nav
+      dense
+    >
+      <v-list-item>
+          
+        <v-spacer></v-spacer>
+
+          <v-btn icon large @click="drawer = !drawer">
+            <v-icon>
+              mdi-close
+            </v-icon>
+          </v-btn>
+      </v-list-item>     
+
+      <v-list-item-group> 
+
+          <v-list-item>
+            <v-list-item-content
+              class="my-3" 
+              @click="$vuetify.goTo('#about', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
+           >About</v-list-item-content>
+          </v-list-item>
+
+          <v-list-item v-if="landingData.works.length" >
+            <v-list-item-content              
+              class="my-3" 
+              @click="$vuetify.goTo('#works', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
+           >Portfolio</v-list-item-content>
+          </v-list-item>
+
+          <v-list-item v-if="landingData.categories.length" >
+            <v-list-item-content              
+              class="my-3" 
+              @click="$vuetify.goTo('#items', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
+           >Our Service</v-list-item-content>
+          </v-list-item>
+
+          <v-list-item v-if="landingData.reviews.length" >
+            <v-list-item-content
+              class="my-3" 
+              @click="$vuetify.goTo('#reviews', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
+           >Reviews</v-list-item-content>
+          </v-list-item>   
+
+          <v-list-item>
+            <v-list-item-content
+              class="my-3" 
+              @click="$vuetify.goTo('#contacts', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
+           >Contacts</v-list-item-content>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-content
+              class="my-3" 
+              @click="$vuetify.goTo('#order', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
+           >Make order</v-list-item-content>
+          </v-list-item>
+          
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar app>
       <v-app-bar-nav-icon 
         class="d-md-none" 
         @click.stop="drawer = !drawer"
@@ -82,78 +152,9 @@
 
   </v-app-bar>
 
-  <v-navigation-drawer
-    app
-    v-model="drawer"
-    disable-resize-watcher 
-  >
-    <v-list
-      nav
-      dense
-    >
-      <v-list-item>
-          
-        <v-spacer></v-spacer>
+    <v-content app>
 
-          <v-btn icon large @click="drawer = !drawer">
-            <v-icon>
-              mdi-close
-            </v-icon>
-          </v-btn>
-      </v-list-item>     
-
-      <v-list-item-group> 
-
-          <v-list-item>
-            <v-list-item-content
-              class="my-3" 
-              @click="$vuetify.goTo('#about', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
-           >About</v-list-item-content>
-          </v-list-item>
-
-          <v-list-item v-if="landingData.works.length" >
-            <v-list-item-content              
-              class="my-3" 
-              @click="$vuetify.goTo('#works', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
-           >Portfolio</v-list-item-content>
-          </v-list-item>
-
-          <v-list-item v-if="landingData.categories.length" >
-            <v-list-item-content              
-              class="my-3" 
-              @click="$vuetify.goTo('#items', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
-           >Our Service</v-list-item-content>
-          </v-list-item>
-
-          <v-list-item v-if="landingData.reviews.length" >
-            <v-list-item-content
-              class="my-3" 
-              @click="$vuetify.goTo('#reviews', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
-           >Reviews</v-list-item-content>
-          </v-list-item>   
-
-          <v-list-item>
-            <v-list-item-content
-              class="my-3" 
-              @click="$vuetify.goTo('#contacts', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
-           >Contacts</v-list-item-content>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-content
-              class="my-3" 
-              @click="$vuetify.goTo('#order', { offset: +50,  easing: 'easeInOutCubic' }); drawer = !drawer"
-           >Make order</v-list-item-content>
-          </v-list-item>
-          
-        </v-list-item-group>
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-content>
-      <v-container fluid>      
-        
-        <v-parallax
+      <v-parallax
           dark          
           v-if="landingData.settings.file" 
           :src='landingData.settings.file.src'
@@ -178,8 +179,10 @@
               >make order</v-btn>
             </v-col>
           </v-row>
-        </v-parallax>     
+      </v-parallax>  
 
+      <v-container fluid> 
+   
         <v-row justify="center" id="about">
           <v-col cols="10" md="8">
             <h3 class="display-1 font-weight-thin my-5">About</h3> 
@@ -293,7 +296,7 @@
                         <v-carousel
                           v-if="work.files.length"
                           cycle
-                          height="400"
+                          height="400px"
                           show-arrows-on-hover
                         >
                           <v-carousel-item
@@ -307,7 +310,7 @@
                                 align="center"
                                 justify="center"
                               >
-                                  <v-img :src='file.src'></v-img>
+                                <v-img :src='file.src' max-height="400px" contain></v-img>
                               </v-row>
                             </v-sheet>
                           </v-carousel-item>
@@ -379,7 +382,7 @@
             justify="center"      
             id="order" 
           >
-            <v-col  cols="10" md="8">
+            <v-col cols="10" md="8">
               <h3 class="display-1 font-weight-thin mb-5">Send order</h3> 
               <v-divider class="my-5"></v-divider>      
               <newOrder/>
@@ -471,7 +474,7 @@
             </v-col>
           </v-row>
         </v-container>
-      </v-content>    
+      </v-content>  
       <v-footer>
         <v-row>
           <v-col cols="12"  class="text-center">
@@ -479,15 +482,14 @@
             <router-link color="cyan" :to="localePath('/login')">Log in</router-link> | <router-link :to="localePath('/dashboard/home')">Dashboard</router-link>
           </v-col>
         </v-row>
-      </v-footer>
-  </div>
+      </v-footer>       
+ </v-app>
 </template>
 
 <script>
 import newOrder from '~/components/dashboard/orders/new.vue'
 
 export default {
-  layout: 'landing',  
   components: {
     newOrder
   },
@@ -562,13 +564,7 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  padding: 0;
-}
 .v-parallax {
   height: 100vh !important;
-}
-#order, #contacts {
-  min-height: 100vh;
 }
 </style>
