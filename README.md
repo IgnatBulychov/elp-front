@@ -11,7 +11,7 @@
 ELP is a one-page site template with a control panel. This application consists of two parts:
 
 - **[Backend is an API made by Laravel](https://github.com/IgnatBulychov/elp-back/)**
-- **[Frontend by Nuxt.js(this page)](https://github.com/IgnatBulychov/elp-back/)**
+- **[Frontend by Nuxt.js (this page)](https://github.com/IgnatBulychov/elp-front/)**
 
 ## Installation
 
